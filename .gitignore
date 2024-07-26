@@ -1,0 +1,7 @@
+.manim-slides.toml
+__pycache__/
+media/
+pictures/
+presentation.html
+presentation_assets/
+slides/
