@@ -778,24 +778,274 @@ class Presentation(Slide):
 
         self.next_slide()
 
-        game_bob.set_color(WHITE).next_to(subtitle_game, DOWN, buff=0.5).to_edge(LEFT, buff=1)
-        game_alice.set_color(WHITE).next_to(game_bob, RIGHT, buff=2)
-        game_payoff = Text("Payoff").scale(0.6).next_to(game_alice, RIGHT, buff=2)
+        game_bob.set_color(WHITE).next_to(subtitle_game, DOWN, buff=0.5).to_edge(LEFT, buff=2)
+        game_alice = Group(game_alice.set_color(WHITE), MyTex(r'({\sc Oracle})').next_to(game_alice, RIGHT, buff=0.1)).next_to(game_bob, RIGHT, buff=3.5)
+        game_payoff = Text("Payoff", color=WHITE).scale(0.6).next_to(game_alice, RIGHT, buff=2)
+
+        bob_round = [MyTex(r'$\xt{\mmy}{1} = {\mme \over r}$').next_to(game_bob, DOWN, buff=0.5)]
+        alice_round = [MyTex(r'$\xt{\mmx}{1} = \displaystyle\argmax_{\mmx\in\cc{A}} \brmf(\mmx) \bullet \xt{\mmy}{1}$').next_to(game_alice, DOWN, buff=0.5)]
+        alice_round[-1].shift([0, bob_round[-1].get_center()[1] - alice_round[-1].get_center()[1] - 0.1, 0])
+        payoff_round = [MyTex(r'$\brmf(\xt{\mmx}{1}) \bullet \xt{\mmy}{1}$').next_to(game_payoff, DOWN, buff=0.5)]
+        payoff_round[-1].shift([0, bob_round[-1].get_center()[1] - payoff_round[-1].get_center()[1], 0])
+
+        bob_round.append(MyTex(r'$\xt{\mmy}{2} = {\mmexp\big(-{\eta\over \rho}\brmf(\xt{\mmx}{1})\big) \over \Tr\Big(\mmexp\big(-{\eta\over \rho}\brmf(\xt{\mmx}{1})\big)\Big)}$').next_to(bob_round[-1], DOWN, buff=0.25))
+        alice_round.append(MyTex(r'$\xt{\mmx}{2} = \displaystyle\argmax_{\mmx\in\cc{A}} \brmf(\mmx) \bullet \xt{\mmy}{2}$').next_to(alice_round[-1], DOWN, buff=0.25))
+        alice_round[-1].shift([0, bob_round[-1].get_center()[1] - alice_round[-1].get_center()[1] - 0.1, 0])
+        payoff_round.append(MyTex(r'$\brmf(\xt{\mmx}{2}) \bullet \xt{\mmy}{2}$').next_to(payoff_round[-1], DOWN, buff=0.25))
+        payoff_round[-1].shift([0, bob_round[-1].get_center()[1] - payoff_round[-1].get_center()[1], 0])
+
+        bob_round.append(MyTex(r'$\xt{\mmy}{3} = {\mmexp\big(-{\eta\over \rho}\sum_{\tau=1}^{2}\brmf(\xt{\mmx}{\tau})\big) \over \Tr\Big(\mmexp\big(-{\eta\over \rho}\sum_{\tau=1}^{2}\brmf(\xt{\mmx}{\tau})\big)\Big)}$').next_to(bob_round[-1], DOWN, buff=0.25))
+        alice_round.append(MyTex(r'$\xt{\mmx}{3} = \displaystyle\argmax_{\mmx\in\cc{A}} \brmf(\mmx) \bullet \xt{\mmy}{3}$').next_to(alice_round[-1], DOWN, buff=0.25))
+        alice_round[-1].shift([0, bob_round[-1].get_center()[1] - alice_round[-1].get_center()[1] - 0.1, 0])
+        payoff_round.append(MyTex(r'$\brmf(\xt{\mmx}{3}) \bullet \xt{\mmy}{3}$').next_to(payoff_round[-1], DOWN, buff=0.25))
+        payoff_round[-1].shift([0, bob_round[-1].get_center()[1] - payoff_round[-1].get_center()[1], 0])
+
+        vdots = [MyTex(r'$\vdots$') for i in range(3)]
+        vdots[0].next_to(bob_round[-1], DOWN, buff=0.5)
+        vdots[1].next_to(alice_round[-1], DOWN, buff=0.5).shift([0,vdots[0].get_center()[1] - vdots[1].get_center()[1],0])
+        vdots[2].next_to(payoff_round[-1], DOWN, buff=0.5).shift([0,vdots[0].get_center()[1] - vdots[2].get_center()[1],0])
+
+        bob_round.append(MyTex(r'$\xt{\mmy}{T} = {\mmexp\big(-{\eta\over \rho}\sum_{\tau=1}^{T-1}\brmf(\xt{\mmx}{\tau})\big) \over \Tr\Big(\mmexp\big(-{\eta\over \rho}\sum_{\tau=1}^{T-1}\brmf(\xt{\mmx}{\tau})\big)\Big)}$').next_to(vdots[0], DOWN, buff=0.5))
+        alice_round.append(MyTex(r'$\xt{\mmx}{T} = \displaystyle\argmax_{\mmx\in\cc{A}} \brmf(\mmx) \bullet \xt{\mmy}{T}$').next_to(vdots[1], DOWN, buff=0.5))
+        alice_round[-1].shift([0, bob_round[-1].get_center()[1] - alice_round[-1].get_center()[1] - 0.1, 0])
+        payoff_round.append(MyTex(r'$\brmf(\xt{\mmx}{T}) \bullet \xt{\mmy}{T}$').next_to(vdots[2], DOWN, buff=0.5))
+        payoff_round[-1].shift([0, bob_round[-1].get_center()[1] - payoff_round[-1].get_center()[1], 0])
+
+        game_avg_line = Line(bob_round[-1].get_left(), payoff_round[-1].get_right() + [0.5,0,0])
+        game_avg_line.shift([0, bob_round[-1].get_bottom()[1] - game_avg_line.get_center()[1] - 0.2, 0])
+
+        game_avg = []
+        game_avg.append(MyTex(r'$\tilde{\mmy} = {1\over T} \sum_{t=1}^T \xt{\mmy}{t}$').set_color(BLUE).next_to(bob_round[-1], DOWN, buff=0.2))
+        game_avg.append(MyTex(r'$\tilde{\mmx} = {1\over T} \sum_{t=1}^T \xt{\mmx}{t}$').set_color(BLUE).next_to(alice_round[-1], DOWN, buff=0.2))
+        game_avg.append(MyTex(r'${1\over T}\sum_{t=1}^T \brmf(\xt{\mmx}{t}) \bullet \xt{\mmy}{t}$').set_color(BLUE).next_to(payoff_round[-1], DOWN, buff=0.2))
+        for avg in game_avg:
+            avg.shift([0, game_avg_line.get_bottom()[1] - avg.get_top()[1] - 0.2, 0])
+
+        game_process_group = Group(game_bob, game_alice, game_payoff, *bob_round, *alice_round, *payoff_round, *vdots, game_avg_line, *game_avg)
+        game_process_group.scale(0.9, about_point=game_process_group.get_top())
 
         self.play(FadeIn(game_alice, game_bob, game_payoff))
+        self.next_slide()
+        self.play(FadeIn(bob_round[0]))
+        self.next_slide()
+        self.play(FadeIn(alice_round[0]))
+        self.next_slide()
+        self.play(FadeIn(payoff_round[0]))
+        self.next_slide()
+        self.play(FadeIn(bob_round[1]))
+        self.next_slide()
+        self.play(FadeIn(alice_round[1]))
+        self.next_slide()
+        self.play(FadeIn(payoff_round[1]))
+        self.next_slide()
+        self.play(FadeIn(bob_round[2]))
+        self.wait()
+        self.next_slide()
+        self.play(FadeIn(alice_round[2]))
+        self.next_slide()
+        self.play(FadeIn(payoff_round[2]))
+        self.next_slide()
+        self.play(FadeIn(*vdots, bob_round[-1], alice_round[-1], payoff_round[-1]))
+        self.next_slide()
+        self.play(Create(game_avg_line))
+        self.play(FadeIn(*game_avg))
+        self.wait()
+        self.next_slide()
+
+        self.play(game_process_group.animate.scale(0.7, about_point=game_process_group.get_top()))
+        self.next_slide()
+
+        game_claim = Theorem(r'''
+        {\bf\underline{Claim:}}
+        Choose $T = \lceil{4\rho^2 \ln r \over \eps^2}\rceil$ and $\eta = \sqrt{ {\ln r \over T} }$, we have:
+
+        $\lambda^*\ \overset{(i)}{\le}\ \displaystyle\max_{\mmx\in\cc{A}}\ \brmf(\mmx)\bullet\tilde{\mmy}\ \overset{(ii)}{\le}\ {1\over T}\sum_{t=1}^T \brmf(\xt{\mmx}{t}) \bullet \xt{\mmy}{t} \ \overset{(iii)}{\le}\ \displaystyle\min_{\mmy\in\cc{B}}\ \brmf(\tilde{\mmx})\bullet \mmy + \eps\ \overset{(iv)}{\le}\ \lambda^* + \eps$
+        ''', edge_color=BLUE).scale(0.8).next_to(game_process_group, DOWN, buff=0.3)
+        
+        self.play(FadeIn(game_claim))
+        self.next_slide()
+
+        self.play(FadeOut(game_process_group), game_claim.animate.scale(0.5/0.8).next_to(game_thm, DOWN, buff=0.1).to_edge(RIGHT, buff=0.5))
+
+        self.wait()
+        self.next_slide()
+
+        game_proof = []
+
+        game_proof.append([
+        MyTex(r'''
+        \[ (i)\ \max_{\mmx\in\cc{A}}\ \brmf(\mmx)\bullet \tilde{\mmy}
+            \ge \min_{\mmy\in\cc{B}} \max_{\mmx\in\cc{A}}\ \brmf(\mmx)\bullet \mmy
+            = \lambda^* \]
+        '''),
+        MyTex(r'''
+        \[ (i)\ \max_{\mmx\in\cc{A}}\ \brmf(\mmx)\bullet \tilde{\mmy}
+            \ge \lambda^* \]
+        ''').scale(0.8).next_to(subtitle_game, DOWN, buff=0.5).to_edge(LEFT, buff=1).set_color(BLUE)
+        ])
+
+        game_proof.append([
+        MyTex(r'''
+        \[ (iv)\ \min_{\mmy\in\cc{B}}\ \brmf(\tilde{\mmx}) \bullet \mmy
+            \le \max_{\mmx\in\cc{A}} \min_{\mmy\in\cc{B}}\ \brmf(\mmx)\bullet \mmy
+            = \lambda^* \]
+        '''),
+        MyTex(r'''
+        \[ (iv)\ \min_{\mmy\in\cc{B}}\ \brmf(\tilde{\mmx}) \bullet \mmy + \eps
+            \le \lambda^* + \eps \]
+        ''').scale(0.8).next_to(game_proof[-1][-1], DOWN, buff=0.25).to_edge(LEFT, buff=1).set_color(BLUE)
+        ])
+
+        game_proof.append([
+        MyTex(r'''
+        \[ (ii)\ \brmf(\mmx^*)\bullet\xt{\mmy}{t} \le \max_{\mmx \in \cc{A}}\ \brmf(\mmx) \bullet \xt{\mmy}{t} \]
+        '''),
+        MyTex(r'''
+        \[ (ii)\ \brmf(\mmx^*)\bullet\xt{\mmy}{t} \le \brmf(\xt{\mmx}{t}) \bullet \xt{\mmy}{t} \]
+        '''),
+        MyTex(r'''
+        \[ (ii)\ {1\over T} \sum_{t=1}^T \brmf(\mmx^*)\bullet\xt{\mmy}{t} \le {1\over T}\sum_{t=1}^T \brmf(\xt{\mmx}{t}) \bullet \xt{\mmy}{t} \]
+        '''),
+        MyTex(r'''
+        \[ (ii)\ \brmf(\mmx^*)\bullet\tilde{\mmy} \le {1\over T}\sum_{t=1}^T \brmf(\xt{\mmx}{t}) \bullet \xt{\mmy}{t} \]
+        '''),
+        MyTex(r'''
+        \[ (ii)\ \max_{\mmx\in\cc{A}}\ \brmf(\mmx)\bullet\tilde{\mmy} \le {1\over T}\sum_{t=1}^T \brmf(\xt{\mmx}{t}) \bullet \xt{\mmy}{t} \]
+        ''')
+        ])
+
+        self.play(FadeIn(game_proof[0][0]))
+        self.wait()
+        self.next_slide()
+        self.play(ReplacementTransform(game_proof[0][0], game_proof[0][1]))
+
+        self.play(FadeIn(game_proof[1][0]))
+        self.wait()
+        self.next_slide()
+        self.play(ReplacementTransform(game_proof[1][0], game_proof[1][1]))
+
+        self.play(FadeIn(game_proof[2][0]))
+        self.wait()
+        self.next_slide()
+        self.play(ReplacementTransform(game_proof[2][0], game_proof[2][1]))
+        self.wait()
+        self.next_slide()
+        self.play(ReplacementTransform(game_proof[2][1], game_proof[2][2]))
+        self.wait()
+        self.next_slide()
+        self.play(ReplacementTransform(game_proof[2][2], game_proof[2][3]))
+        self.wait()
+        self.next_slide()
+        self.play(ReplacementTransform(game_proof[2][3], game_proof[2][4]))
+        self.wait()
+        self.next_slide()
+        self.play(game_proof[2][4].animate.scale(0.8).next_to(game_proof[1][-1], DOWN, buff=0).to_edge(LEFT, buff=1).set_color(BLUE))
+        self.wait()
+        self.next_slide()
+
+        game_eigenval_claim = Theorem(r'''
+        {\bf\underline{Claim:}} $\displaystyle {1\over T}\sum_{t=1}^T \brmf(\xt{\mmx}{t}) \bullet \xt{\mmy}{t} \le \lambda_{\min}\Big({1\over T}\sum_{t=1}^T \brmf(\xt{\mmx}{t})\Big) + \eps \le \min_{\mmy\in\cc{B}}\ \brmf(\tilde{\mmx})\bullet \mmy + \eps$
+        ''', edge_color=GREEN).shift(DOWN * 0.5)
+        
+        self.play(FadeIn(game_eigenval_claim))
+        self.wait()
+        self.next_slide()
+
+        self.play(game_eigenval_claim.animate.scale(0.5).next_to(game_claim, DOWN, buff=0.1).to_edge(RIGHT, buff=0.5), FadeOut(game_proof[0][1]), FadeOut(game_proof[1][1]), FadeOut(game_proof[2][4]))
 
         self.next_slide()
 
-        # # Geometric Optimization ######################################################################################
+        game_eigenval_proof = []
+        game_eigenval_proof.append(
+            Text('Proof sketch:', color=GREEN).scale(0.5).next_to(subtitle_game, DOWN, buff=1).to_edge(LEFT, buff=1)
+        )
+        game_eigenval_proof.append(
+            MyTex(r'''\scalebox{0.8}{
+            $ \xt{\mmw}{1} = \mme,\ \xt{\mmw}{t} = \displaystyle\mmexp\Big(-{\eta\over \rho}\sum_{\tau=1}^{t-1}\brmf(\xt{\mmx}{\tau})\Big) $
+            } ''', up=game_eigenval_proof[-1], buff=0.25)
+        )
+        game_eigenval_proof.append(
+            MyTex(r'''\scalebox{0.8}{
+            Upperbound: $\displaystyle \Tr(\xt{\mmw}{T+1}) \le \Tr(\xt{\mmw}{T})\cdot\exp\Big(- {\eta\over \rho}\brmf(\xt{\mmx}{T})\bullet\xt{\mmy}{T} + {\eta^2\over \rho^2}\big(\brmf(\xt{\mmx}{T})\big)^2\bullet\xt{\mmy}{T}\Big)$
+            } ''', up=game_eigenval_proof[-1], buff=0.25)
+        )
+        game_eigenval_proof.append(
+            MyTex(r'''\scalebox{0.8}{
+            Upperbound: $\displaystyle \Tr(\xt{\mmw}{T+1}) \le r\cdot\exp\Big(-\sum_{t=1}^T {\eta\over \rho} \brmf(\xt{\mmx}{t})\bullet \xt{\mmy}{t} + \sum_{t=1}^T {\eta^2\over \rho^2}\big(\brmf(\xt{\mmx}{t})\big)^2\bullet\xt{\mmy}{t}\Big)$
+            } ''', up=game_eigenval_proof[-2], buff=0.24)
+        )
+        game_eigenval_proof.append(
+            MyTex(r'''\scalebox{0.8}{
+            Lowerbound: $\displaystyle \Tr(\xt{\mmw}{T+1}) \ge \displaystyle\exp\Big(-{\eta\over \rho}\lambda_{\min}\big(\sum_{t=1}^{T}\brmf(\xt{\mmx}{t})\big)\Big)$
+            } ''', up=game_eigenval_proof[-1], buff=0.25)
+        )
 
-        # self.play(subtitle_game.animate.move_to(outline_pos['subtitle_game']),
-        #     FadeIn(outline_title, subtitle_eja, subtitle_geometry, subtitle_scp, subtitle_parallel, subtitle_conclu)
-        # )
-        # self.next_slide()
-        # self.play(subtitle_geometry.animate.to_edge(UL, buff=0.5).set_color(WHITE),
-        #     FadeOut(outline_title, subtitle_eja, subtitle_game, subtitle_scp, subtitle_parallel, subtitle_conclu)
-        # )
-        # self.next_slide()
+        self.play(FadeIn(game_eigenval_proof[0]))
+        self.wait()
+        self.next_slide()
+
+        self.play(FadeIn(game_eigenval_proof[1]))
+        self.wait()
+        self.next_slide()
+
+        self.play(FadeIn(game_eigenval_proof[2]))
+        self.wait()
+        self.next_slide()
+
+        self.play(ReplacementTransform(game_eigenval_proof[2], game_eigenval_proof[3]))
+        self.wait()
+        self.next_slide()
+
+        self.play(FadeIn(game_eigenval_proof[4]))
+        self.wait()
+        self.next_slide()
+
+        game_eigenval_proof.append([])
+        game_eigenval_proof[-1].append(
+            MyTex(r'''\scalebox{0.8}{
+            $\displaystyle r\cdot\exp\Big(-\sum_{t=1}^T {\eta\over \rho} \brmf(\xt{\mmx}{t})\bullet \xt{\mmy}{t} + \sum_{t=1}^T {\eta^2\over \rho^2}\big(\brmf(\xt{\mmx}{t})\big)^2\bullet\xt{\mmy}{t}\Big) \ge \exp\Big(-{\eta\over \rho}\lambda_{\min}\big(\sum_{t=1}^{T}\brmf(\xt{\mmx}{t})\big)\Big) $
+            } ''', up=game_eigenval_proof[-2], buff=0.25)
+        )
+        game_eigenval_proof[-1].append(
+            MyTex(r'''\scalebox{0.8}{
+            $\displaystyle {\rho\ln(r)\over \eta T} -{1\over T} \sum_{t=1}^T \brmf(\xt{\mmx}{t}) \bullet \xt{\mmy}{t} + \eta \rho \ge -{1\over T}\lambda_{\min}\big(\sum_{t=1}^{T}\brmf(\xt{\mmx}{t})\big) = -\lambda_{\min}\big(\brmf(\tilde{\mmx})\big)$
+            } ''', up=game_eigenval_proof[-2], buff=0.25)
+        )
+        game_eigenval_proof[-1].append(
+            MyTex(r'''\scalebox{0.8}{
+            $\displaystyle \eps -{1\over T} \sum_{t=1}^T \brmf(\xt{\mmx}{t}) \bullet \xt{\mmy}{t} \ge -\lambda_{\min}\big(\brmf(\tilde{\mmx})\big)$
+            } ''', up=game_eigenval_proof[-2], buff=0.25)
+        )
+
+        self.play(FadeIn(game_eigenval_proof[-1][0]))
+        self.next_slide()
+        self.play(ReplacementTransform(game_eigenval_proof[-1][0], game_eigenval_proof[-1][1]))
+        self.next_slide()
+        self.play(ReplacementTransform(game_eigenval_proof[-1][1], game_eigenval_proof[-1][2]))
+        self.next_slide()
+
+        game_eigenval_proof.append(
+            MyTex(r'''\scalebox{0.9}{
+            $ \big|{\eta \over \rho}\brmf(\xt{\mmx}{t})\bullet \xt{\mmy}{t}\big| \le 1 \ \Leftarrow \ \|{\eta \over \rho}\brmf(\xt{\mmx}{t})\|_\infty \le 1 \ \Leftarrow \ \|\brmf(\xt{\mmx}{t})\|_\infty \le \rho $
+            } ''').next_to(game_eigenval_proof[-1][-1], DOWN, buff=0.5).to_edge(LEFT, buff=1).set_color(RED)
+        )
+
+        self.play(Create(game_eigenval_proof[-1]))
+        self.wait()
+        self.next_slide()
+
+        self.play(FadeOut(game_thm, game_claim, game_eigenval_claim, game_eigenval_proof[0], game_eigenval_proof[1], game_eigenval_proof[3], game_eigenval_proof[4], game_eigenval_proof[5][2], game_eigenval_proof[-1]))
+
+        # Geometric Optimization ######################################################################################
+
+        self.play(subtitle_game.animate.move_to(outline_pos['subtitle_game']),
+            FadeIn(outline_title, subtitle_eja, subtitle_geometry, subtitle_scp, subtitle_parallel, subtitle_conclu)
+        )
+        self.next_slide()
+        self.play(subtitle_geometry.animate.to_edge(UL, buff=0.5).set_color(WHITE),
+            FadeOut(outline_title, subtitle_eja, subtitle_game, subtitle_scp, subtitle_parallel, subtitle_conclu)
+        )
+        self.next_slide()
 
         # # Symmetric Cone Programming ##################################################################################
 
