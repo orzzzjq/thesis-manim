@@ -1,5 +1,6 @@
 from manim import *
 from manim_slides import Slide, ThreeDSlide
+import pd
 
 def LatexPreamble():
     preamble = TexTemplate()
@@ -1085,19 +1086,235 @@ class Presentation(Slide):
         )
         self.next_slide()
 
-        geometry_summary_table = GeometrySummary()
-        geometry_summary_notes = MyTex(r'''\scalebox{0.9}{
-        $d$: dimensions, \hspace{.5em}
-        $n$: number of objs, \hspace{.5em}
-        $M$: number of pts, \hspace{.5em}
-        $N$: number of nonzeros
-        } ''').next_to(geometry_summary_table, DOWN, buff=0.2)
+        # geometry_summary_table = GeometrySummary()
+        # geometry_summary_notes = MyTex(r'''\scalebox{0.9}{
+        # $d$: dimensions, \hspace{.5em}
+        # $n$: number of objs, \hspace{.5em}
+        # $M$: number of pts, \hspace{.5em}
+        # $N$: number of nonzeros
+        # } ''').next_to(geometry_summary_table, DOWN, buff=0.2)
 
-        self.play(FadeIn(geometry_summary_table, geometry_summary_notes))
+        # self.play(FadeIn(geometry_summary_table, geometry_summary_notes))
+        # self.wait()
+        # self.next_slide()
+
+        # self.play(FadeOut(geometry_summary_table, geometry_summary_notes))
+
+        geoemtry_subtitles = []
+        geoemtry_subtitles.append(Text(": PD/SVM").set_font_size(25).next_to(subtitle_geometry, RIGHT, buff=0.2))
+        geoemtry_subtitles.append(Text(": SEBB").set_font_size(25).next_to(subtitle_geometry, RIGHT, buff=0.2))
+        geoemtry_subtitles.append(Text(": SIB").set_font_size(25).next_to(subtitle_geometry, RIGHT, buff=0.2))
+        geoemtry_subtitles.append(Text(": Soft-SIB").set_font_size(25).next_to(subtitle_geometry, RIGHT, buff=0.2))
+
+        ## 1. Polytope Distance / Hard-SVM
+        # self.play(Create(geoemtry_subtitles[0]))
+        # self.wait()
+        # self.next_slide()
+
+        # geometry_pd_p_hall = Polygon(*np.c_[pd.p_points_hall, np.zeros(pd.p_points_hall.shape[0])], color=YELLOW)
+        # geometry_pd_q_hall = Polygon(*np.c_[pd.q_points_hall, np.zeros(pd.q_points_hall.shape[0])], color=BLUE)
+
+        # geometry_pd_p_dots = [Dot([*pd.p_points[i], 0], color=YELLOW) for i in range(len(pd.p_points))]
+        # geometry_pd_q_dots = [Dot([*pd.q_points[i], 0], color=BLUE) for i in range(len(pd.q_points))]
+
+        # geometry_pd_p_dots_group = Group(*geometry_pd_p_dots)
+        # geometry_pd_q_dots_group = Group(*geometry_pd_q_dots)
+
+        # geometry_pd_p_tex = MyTex(r'$\cc{P}$').scale(1.5).next_to(geometry_pd_p_dots_group, DOWN, buff=0.5).set_color(YELLOW)
+        # geometry_pd_q_tex = MyTex(r'$\cc{Q}$').scale(1.5).next_to(geometry_pd_q_dots_group, DOWN, buff=0.5).set_color(BLUE)
+
+        # geometry_pd_opt_line = Line(*pd.optimal_line_seg, color=RED)
+
+        # geometry_pd_draw_group = Group(geometry_pd_p_dots_group, geometry_pd_q_dots_group, geometry_pd_p_hall, geometry_pd_q_hall, geometry_pd_opt_line, geometry_pd_p_tex, geometry_pd_q_tex)
+
+        # geometry_svm_line = Line(*pd.optimal_svm_line, color=RED)
+        # geometry_svm_draw_subgroup = Group(geometry_pd_p_dots_group.copy(), geometry_pd_q_dots_group.copy(), geometry_pd_p_hall.copy(), geometry_pd_q_hall.copy(), geometry_pd_p_tex.copy(), geometry_pd_q_tex.copy())
+        # geometry_svm_draw_group = Group(geometry_svm_draw_subgroup, geometry_svm_line)
+
+        # self.play(FadeIn(geometry_pd_p_dots_group, geometry_pd_q_dots_group, geometry_pd_p_tex, geometry_pd_q_tex))
+        
+        # self.wait()
+        # self.next_slide()
+
+        # self.play(Create(geometry_pd_p_hall), Create(geometry_pd_q_hall))
+        # self.wait()
+        # self.next_slide()
+
+        # self.play(Create(geometry_pd_opt_line))
+        # self.wait()
+        # self.next_slide()
+
+        geometry_pd_prob = [
+            MyTex(r'''
+            Polytope distance:
+            ''', up=subtitle_geometry).set_color(YELLOW),
+            MyTex(r'''
+            \[
+            \begin{aligned}
+                \minimize_{\mmgamma,\ \mmmu}\quad & \|\mmP\mmgamma - \mmQ\mmmu\|\\
+                \subto\quad & \mmone^T \mmgamma = 1, \ \mmgamma \ge 0, \\
+                & \mmone^T \mmmu = 1, \ \mmmu \ge 0.
+            \end{aligned}
+            \]
+            ''')
+        ]
+        geometry_pd_prob[1].next_to(geometry_pd_prob[0], DOWN, buff=0.25).to_edge(LEFT, 1.5)
+        geometry_pd_prob = Group(*geometry_pd_prob)
+
+        # self.play(FadeIn(geometry_pd_prob), geometry_pd_draw_group.animate.scale(0.4).next_to(geometry_pd_prob, RIGHT).to_edge(RIGHT, buff=3))
+        # self.wait()
+        # self.next_slide()
+
+
+        geometry_svm_prob_tex = [
+            MyTex(r'''
+            Support vector machine:
+            ''', up=geometry_pd_prob).set_color(YELLOW),
+            MyTex(r'''
+            \[
+            \begin{aligned}
+            \maximize_{\mmw, s_1, s_2}\quad & s_1 + s_2                             \\
+            \subto\quad                & \mmP^T \mmw - s_1 \mmone \ge 0,  \\
+                                        & -\mmQ^T \mmw - s_2 \mmone \ge 0, \\
+                                        & \|\mmw\| \le 1.
+            \end{aligned}
+            \]
+            '''),
+            MyTex(r'''
+            \[
+            \begin{aligned}
+            \maximize_{\mmw, s_1, s_2}\quad & s_1 + s_2                             \\
+            \subto\quad                & \mmP^T \mmw - s_1 \mmone \in \bR^{m_1}_+,  \\
+                                        & -\mmQ^T \mmw - s_2 \mmone \in \bR^{m_2}_+, \\
+                                        & \|\mmw\| \le 1.
+            \end{aligned}
+            \]
+            ''')
+        ]
+        geometry_svm_prob_tex[1].next_to(geometry_svm_prob_tex[0], DOWN, buff=0.25).to_edge(LEFT, 1.5)
+        geometry_svm_prob = Group(geometry_svm_prob_tex[0], geometry_svm_prob_tex[1])
+
+        # geometry_svm_draw_group.scale(0.4).next_to(geometry_svm_prob, RIGHT).to_edge(RIGHT, buff=3)
+
+        # self.play(FadeIn(geometry_svm_prob), FadeIn(geometry_svm_draw_subgroup))
+        # self.wait()
+        # self.next_slide()
+
+        # self.play(Create(geometry_svm_line))
+        # self.wait()
+        # self.next_slide()
+
+        # self.play(FadeOut(geometry_pd_prob, geometry_pd_draw_group, geometry_svm_draw_group), 
+        #     geometry_svm_prob.animate.next_to(subtitle_geometry, DOWN, buff=0.5).to_edge(LEFT, 1)
+        # )
+        # self.wait()
+        # self.next_slide()
+        
+        geometry_svm_bound_claim = Theorem(r'''
+            {\bf\underline{Claim:}} Any feasible solution to SVM satisfies $s_1 \le D$, $s_2 \le D$, where $D$ is the maximum norm of the input points.
+            ''', edge_color=BLUE)
+
+        self.play(FadeIn(geometry_svm_bound_claim.shift(DOWN)))
         self.wait()
         self.next_slide()
 
-        ## 1. Polytope Distance / Hard-SVM
+        self.play(geometry_svm_bound_claim.animate.scale(0.5).to_edge(UR, buff=0.5))
+        self.wait()
+        self.next_slide()
+
+        geometry_svm_prob_tex[2].next_to(geometry_svm_prob_tex[0], DOWN, buff=0.25).to_edge(LEFT, 1.5)
+
+        self.play(FadeOut(geometry_svm_prob_tex[1]), FadeIn(geometry_svm_prob_tex[2]))
+        self.wait()
+        self.next_slide()
+
+
+        geometry_svm_ftp = [
+            MyTex(r'''
+                Feasibility test problem:\\
+                Find $\mmw, s_1, s_2$ such that
+            ''').set_color(YELLOW),
+            MyTex(r'''
+                \[
+                \begin{aligned}
+                & s_1 + s_2 \ge \hat{\alpha} \\
+                & \mmP^T \mmw - s_1 \mmone \in \bR^{m_1}_+,  \\
+                & -\mmQ^T \mmw - s_2 \mmone \in \bR^{m_2}_+, \\
+                & \|\mmw\| \le 1.
+                \end{aligned}
+            \]'''),
+            MyTex(r'''
+                \[
+                \begin{aligned}
+                & s_1 + s_2 \ge (1 - \eps) \hat{\alpha} \\
+                & \mmP^T \mmw - s_1 \mmone \in \bR^{m_1}_+,  \\
+                & -\mmQ^T \mmw - s_2 \mmone \in \bR^{m_2}_+, \\
+                & s_1 \le D,\ s_2 \le D, \\
+                & \|\mmw\| \le 1.
+                \end{aligned}
+            \]''')
+        ]
+        geometry_svm_ftp[0][0][-19:].set_color(WHITE)
+        geometry_svm_ftp[0].next_to(geometry_svm_prob, RIGHT, buff=1).to_edge(UP, buff=2)
+        geometry_svm_ftp[1].next_to(geometry_svm_ftp[0], DOWN, buff=0.25).shift([geometry_svm_ftp[0].get_left()[0] - geometry_svm_ftp[1].get_left()[0] + 0.5, 0, 0])
+        geometry_svm_ftp[2].next_to(geometry_svm_ftp[0], DOWN, buff=0.25).shift([geometry_svm_ftp[0].get_left()[0] - geometry_svm_ftp[2].get_left()[0] + 0.5, 0, 0])
+
+        self.play(FadeIn(geometry_svm_ftp[0], geometry_svm_ftp[1]))
+        self.wait()
+        self.next_slide()
+
+        self.play(FadeOut(geometry_svm_ftp[1]), FadeIn(geometry_svm_ftp[2]))
+        self.wait()
+        self.next_slide()
+
+
+        geometry_svm_ftp_thm = Theorem(r'''
+            {\bf\underline{Thm:}}
+            There is an iterative algorithm that solves FTP in $O({D^2 \log M \over \eps^2 \hat{\alpha}^2})$ iterations, with a running time of $O(N + d)$ per iteration.
+        ''').next_to(geometry_svm_ftp[2], DOWN)
+        geometry_svm_ftp_thm.shift([-geometry_svm_ftp_thm.get_center()[0], 0, 0])
+
+        self.play(FadeIn(geometry_svm_ftp_thm))
+        self.wait()
+        self.next_slide()
+
+        self.play(geometry_svm_ftp_thm.animate.scale(0.5).next_to(geometry_svm_bound_claim, DOWN, buff=0.1).to_edge(RIGHT, buff=0.5),
+            FadeOut(geometry_svm_prob_tex[0], geometry_svm_prob_tex[2])
+        )
+        self.play(Group(geometry_svm_ftp[0], geometry_svm_ftp[2]).animate.scale(0.8).next_to(geometry_svm_ftp_thm, DOWN, buff=0.3).to_edge(RIGHT, buff=1))
+        self.wait()
+        self.next_slide()
+
+        geometry_svm_ftp_proof = [
+            MyTex(r'''\scalebox{0.85}{\parbox{10cm}{
+            1. Reduction to zero-sum game
+            \begin{myitemize}
+            \item $\cc{K} = \bR^M_+$, $\displaystyle\brmf(\mmw, s_1, s_2) = \begin{pmatrix}\mmP^T \mmw - s_1 \mmone \\- \mmQ^T \mmw - s_2 \mmone\end{pmatrix}$
+            \item $\cc{A} = \Big\{(\mmw, s_1, s_2) \in \bU : s_1 + s_2 \ge \hat{\alpha},\ s_1 \le D,\ s_2 \le D,\ \|\mmw\| \le 1 \Big\}$
+            \item If $\hat{\alpha} \le \alpha^*$, $\displaystyle\max_{\mmx\in \cc{A}} \min_{\mmy \in \cc{B}} \ \brmf(\mmx) \bullet \mmy \ge 0$
+            \item Solve the game up to additive error $\eps\hat{\alpha} / 2$
+            \item If exists $t$: $\displaystyle\max_{\mmx \in \cc{A}}\ \brmf(\mmx) \bullet \xt{\mmy}{t} < 0$, then $\lambda^* < 0$ and $\hat{\alpha} > \alpha^*$
+            \item Otherwise $(\tilde{w}, \tilde{s}_1 - {\eps\over 2}, \tilde{s}_2 - {\eps\over 2})$ is a solution to FTP
+            \end{myitemize}
+            }} ''', up=subtitle_geometry),
+            MyTex(r'''\scalebox{0.85}{\parbox{10cm}{
+            2. Implementation of {\sc Oracle}
+            \begin{myitemize}
+            \item $\cc{K} = \bR^M_+$, $\displaystyle\brmf(\mmw, s_1, s_2) = \begin{pmatrix}\mmP^T \mmw - s_1 \mmone \\- \mmQ^T \mmw - s_2 \mmone\end{pmatrix}$
+            \item $\cc{A} = \Big\{(\mmw, s_1, s_2) \in \bU : s_1 + s_2 \ge \hat{\alpha},\ s_1 \le D,\ s_2 \le D,\ \|\mmw\| \le 1 \Big\}$
+            \item If $\hat{\alpha} \le \alpha^*$, $\displaystyle\max_{\mmx\in \cc{A}} \min_{\mmy \in \cc{B}} \ \brmf(\mmx) \bullet \mmy \ge 0$
+            \item Solve the game up to additive error $\eps\hat{\alpha} / 2$
+            \item If exists $t$: $\displaystyle\max_{\mmx \in \cc{A}}\ \brmf(\mmx) \bullet \xt{\mmy}{t} < 0$, then $\lambda^* < 0$ and $\hat{\alpha} > \alpha^*$
+            \item Otherwise $(\tilde{w}, \tilde{s}_1 - {\eps\over 2}, \tilde{s}_2 - {\eps\over 2})$ is a solution to FTP
+            \end{myitemize}
+            }} ''', up=subtitle_geometry),
+        ]
+
+        geometry_svm_ftp_proof[0][0][:25].set_color(RED)
+
+        self.play(FadeIn(geometry_svm_ftp_proof[0]))
+        self.wait()
+        self.next_slide()
 
         ## 2. SEBB
 
