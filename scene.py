@@ -1,6 +1,7 @@
 from manim import *
 from manim_slides import Slide, ThreeDSlide
 import pd
+import sib
 
 def LatexPreamble():
     preamble = TexTemplate()
@@ -140,8 +141,9 @@ def LatexPreamble():
 
         \setlength{\parindent}{0pt}
         \usepackage{enumitem}
-        \newlist{myitemize}{itemize}{1}
+        \newlist{myitemize}{itemize}{2}
         \setlist[myitemize,1]{label=\textbullet,leftmargin=10pt,itemsep=.5em}
+        \setlist[myitemize,2]{label=$\blacktriangleright$,leftmargin=20pt,itemsep=.5em}
 
         \usepackage{pmboxdraw}
         \usepackage{newunicodechar}
@@ -1100,11 +1102,459 @@ class Presentation(Slide):
 
         # self.play(FadeOut(geometry_summary_table, geometry_summary_notes))
 
-        geoemtry_subtitles = []
-        geoemtry_subtitles.append(Text(": PD/SVM").set_font_size(25).next_to(subtitle_geometry, RIGHT, buff=0.2))
-        geoemtry_subtitles.append(Text(": SEBB").set_font_size(25).next_to(subtitle_geometry, RIGHT, buff=0.2))
-        geoemtry_subtitles.append(Text(": SIB").set_font_size(25).next_to(subtitle_geometry, RIGHT, buff=0.2))
-        geoemtry_subtitles.append(Text(": Soft-SIB").set_font_size(25).next_to(subtitle_geometry, RIGHT, buff=0.2))
+        geoemtry_subtitle_sib = Text(": SIB").set_font_size(25).next_to(subtitle_geometry, RIGHT, buff=0.2).shift(UP * 0.02)
+
+        self.play(Create(geoemtry_subtitle_sib))
+        self.wait()
+        self.next_slide()
+
+        geometry_draw_sib = Circle(radius=sib.radius, color=RED, fill_opacity=0.3)
+        geometry_draw_sib_labels = []
+        for i in range(len(sib.objects)):
+            geometry_draw_sib_labels.append(
+                MyTex(f'$\Omega_{i + 1}$').move_to(sib.objects[i].get_center())
+            )
+        geometry_draw_sib_group = Group(geometry_draw_sib, *sib.objects, *geometry_draw_sib_labels)
+
+        self.play(FadeIn(*sib.objects, *geometry_draw_sib_labels))
+        self.wait()
+        self.next_slide()
+
+        self.play(Create(geometry_draw_sib))
+        self.wait()
+        self.next_slide()
+
+        geometry_sib_problem = [
+            MyTex(r'Smallest intersecting ball', up=subtitle_geometry).set_color(BLUE),
+            MyTex(r'''
+                \[
+                \begin{aligned}
+                    \underset{\mmz, \mmv_1, \dots, \mmv_n, r}{\rm minimize} \quad& r\\
+                    {\rm subject\ to} \quad& \|\mmz - \mmv_i\| \le r, \ \forall i \in [n],\\
+                    & \mmv_i \in \Omega_i,\ \forall i \in [n].
+                \end{aligned}
+                \]
+            '''),
+            MyTex(r'''
+                \[
+                \begin{aligned}
+                    \underset{\mmz, \mmv_1, \dots, \mmv_n, r}{\rm minimize} \quad& r\\
+                    {\rm subject\ to} \quad& \begin{pmatrix}\mmz - \mmv_i \\ r\end{pmatrix} \in \cc{Q}^{d+1}, \ \forall i \in [n],\\
+                    & \mmv_i \in \Omega_i,\ \forall i \in [n].
+                \end{aligned}
+                \]
+            '''),
+            MyTex(r'''
+                \[
+                \begin{aligned}
+                    \underset{\mmz, \mmv_1, \dots, \mmv_n, r}{\rm minimize} \quad& r\\
+                    {\rm subject\ to} \quad& \cproduct_{i=1}^n \begin{pmatrix}\mmz - \mmv_i \\ r\end{pmatrix} \in \cproduct_{i=1}^n \cc{Q}^{d+1},\\
+                    & \mmv_i \in \Omega_i,\ \forall i \in [n].
+                \end{aligned}
+                \]
+            ''')
+        ]
+        for i in range(1, len(geometry_sib_problem)):
+            geometry_sib_problem[i].next_to(geometry_sib_problem[0], DOWN, buff=0.25).shift([geometry_sib_problem[0].get_left()[0] - geometry_sib_problem[i].get_left()[0], 0, 0])
+        geometry_sib_problem_group = Group(*geometry_sib_problem[:2])
+
+        self.play(FadeIn(*geometry_sib_problem[:2]),
+            geometry_draw_sib_group.animate.scale(0.5).next_to(geometry_sib_problem_group, RIGHT, buff=1)
+        )
+        self.wait()
+        self.next_slide()
+
+        geometry_sib_claim = Theorem(r'''
+        {\bf\underline{Claim:}} Any solution to SIB satisfies $\mmz \in \conv(\{\Omega_i\}_{i=1}^n)$.
+        ''', edge_color=BLUE).next_to(geometry_sib_problem_group, DOWN, buff=1)
+        geometry_sib_claim.shift([-geometry_sib_claim.get_center()[0], 0, 0])
+        
+        self.play(FadeIn(geometry_sib_claim))
+        self.wait()
+        self.next_slide()
+
+        self.play(geometry_sib_claim.animate.scale(0.5).to_edge(UR, buff=0.5), FadeOut(geometry_draw_sib_group))
+        self.wait()
+        self.next_slide()
+
+        self.play(FadeIn(geometry_sib_problem[2]), FadeOut(geometry_sib_problem[1]))
+        self.wait()
+        self.next_slide()
+
+        self.play(FadeIn(geometry_sib_problem[3]), FadeOut(geometry_sib_problem[2]))
+        self.wait()
+        self.next_slide()
+
+        geometry_sib_ftp_question = [
+            MyTex(r'Question: Let $r^*$ be the optimal radius. Given $\hat{r}$, is $\hat{r} \ge r^*$ or $\hat{r} < r^*$?', up=geometry_sib_problem[3]),
+            MyTex(r'Question: Given $\hat{r}$ and $\eps > 0$, is $(1 + \eps) \hat{r} \ge r^*$ or $\hat{r} < r^*$?', up=geometry_sib_problem[3]),
+            MyTex(r'Feasibility test problem (FTP)', up=geometry_sib_problem[3])
+        ]
+        geometry_sib_ftp_question[0][0][:9].set_color(YELLOW)
+        geometry_sib_ftp_question[1][0][:9].set_color(YELLOW)
+        geometry_sib_ftp_question[2][0].set_color(YELLOW)
+
+        self.play(Create(geometry_sib_ftp_question[0]))
+        self.wait()
+        self.next_slide()
+
+        geometry_sib_ftp = [
+            MyTex(r'''
+            Find $\mmz, \mmv_1, \dots, \mmv_n, r$ such that
+            ''', up=geometry_sib_ftp_question[0], buff=0.25),
+            MyTex(r'''
+                \[
+                \begin{aligned}
+                    & r \le \hat{r},\\
+                    & \cproduct_{i=1}^n \begin{pmatrix}\mmz - \mmv_i \\ r\end{pmatrix} \in \cproduct_{i=1}^n \cc{Q}^{d+1},\\
+                    & \mmv_i \in \Omega_i,\ \forall i \in [n],\\
+                    & \mmz \in \conv(\{\Omega_i\}_{i=1}^n).
+                \end{aligned}
+                \]
+            '''),
+            MyTex(r'''
+                \[
+                \begin{aligned}
+                    & r \le (1 + \eps)\hat{r},\\
+                    & \cproduct_{i=1}^n \begin{pmatrix}\mmz - \mmv_i \\ r\end{pmatrix} \in \cproduct_{i=1}^n \cc{Q}^{d+1},\\
+                    & \mmv_i \in \Omega_i,\ \forall i \in [n],\\
+                    & \mmz \in \conv(\{\Omega_i\}_{i=1}^n).
+                \end{aligned}
+                \]
+            ''')
+        ]
+        geometry_sib_ftp[1].next_to(geometry_sib_ftp[0], DOWN, buff=0.25).to_edge(LEFT, buff=1.5)
+        geometry_sib_ftp[2].next_to(geometry_sib_ftp[0], DOWN, buff=0.25).to_edge(LEFT, buff=1.5)
+
+        self.play(FadeIn(geometry_sib_ftp[0], geometry_sib_ftp[1]))
+        self.wait()
+        self.next_slide()
+
+        self.play(FadeIn(geometry_sib_ftp_question[1]), FadeOut(geometry_sib_ftp_question[0]))
+        self.wait()
+        self.next_slide()
+
+        self.play(FadeIn(geometry_sib_ftp[2]), FadeOut(geometry_sib_ftp[1]))
+        self.wait()
+        self.next_slide()
+
+        self.play(FadeIn(geometry_sib_ftp_question[2]), FadeOut(geometry_sib_ftp_question[1]))
+        self.play(FadeOut(geometry_sib_problem[0], geometry_sib_problem[3]),
+            Group(geometry_sib_ftp_question[2], geometry_sib_ftp[0], geometry_sib_ftp[2]).animate.next_to(subtitle_geometry, DOWN, buff=0.5).to_edge(LEFT, buff=1)
+        )
+        self.wait()
+        self.next_slide()
+
+        geometry_sib_ftp_thm = Theorem(r'''
+            {\bf\underline{Thm:}} Let $D$ be the diameter of $\conv(\{\Omega_i\}_{i=1}^n)$.
+            There is an iterative algorithm that solves FTP in $O({D^2 \log n \over \eps^2 \hat{r}^2})$ iterations.
+        ''', edge_color=YELLOW).next_to(geometry_sib_ftp[2], DOWN, buff=1)
+        geometry_sib_ftp_thm.shift([-geometry_sib_ftp_thm.get_center()[0], 0, 0])
+
+        self.play(FadeIn(geometry_sib_ftp_thm))
+        self.wait()
+        self.next_slide()
+
+        self.play(geometry_sib_ftp_thm.animate.scale(0.5).next_to(geometry_sib_claim, DOWN, buff=0.1).to_edge(RIGHT, buff=0.5))
+        self.play(Group(geometry_sib_ftp_question[2], geometry_sib_ftp[0], geometry_sib_ftp[2]).animate.scale(0.5).next_to(geometry_sib_ftp_thm, DOWN, buff=0.25).to_edge(RIGHT, buff=1))
+        self.wait()
+        self.next_slide()
+
+        geometry_ftp_proof_reduction = [
+            MyTex(r'''\scalebox{0.8}{\parbox{15cm}{
+            1. Reduction to zero-sum game
+            }}''', up=subtitle_geometry).set_color(RED),
+        ]
+        geometry_ftp_proof_reduction.append( # 1
+            MyTex(r'''\scalebox{0.8}{\parbox{15cm}{
+            $\displaystyle \cc{K} = \cproduct_{i=1}^n \cc{Q}^{d+1},\ \brmf(\mmz, \mmv_1, \dots, \mmv_n, r) = \cproduct_{i=1}^n \begin{pmatrix}\mmz - \mmv_i \\ r\end{pmatrix}$
+            }}''', up=geometry_ftp_proof_reduction[-1], buff=0.25)
+        )
+        geometry_ftp_proof_reduction.append( # 2
+            MyTex(r'''\scalebox{0.8}{\parbox{15cm}{
+            $\displaystyle \brmf(\mmz, \mmv_1, \dots, \mmv_n, r) \bullet \mmy \ge 0,\ \forall \mmy \in \cc{B} \subseteq \cc{K}$
+            }}''', up=geometry_ftp_proof_reduction[-1], buff=0.25)
+        )
+        geometry_ftp_proof_reduction.append( # 3
+            MyTex(r'''\scalebox{0.8}{\parbox{15cm}{
+            $\displaystyle \cc{A} = \Big\{(\mmz, \mmv_1, \dots, \mmv_n, r) : \mmz \in \conv(\{\Omega_i\}_{i=1}^n),\ \mmv_i \in \Omega_i, \forall i \in [n], \ r \le \hat{r} \Big\}$
+            }}''', up=geometry_ftp_proof_reduction[-1], buff=0.25)
+        )
+        geometry_ftp_proof_reduction.append( # 4
+            MyTex(r'''\scalebox{0.8}{\parbox{15cm}{
+            Let $\cc{O}^*$ be the optimal set. If $\hat{r}\ge r^*$, $\cc{O}^* \cap \cc{A} \ne \varnothing$.
+            }}''', up=geometry_ftp_proof_reduction[-1], buff=0.25)
+        )
+        geometry_ftp_proof_reduction.append( # 5
+            MyTex(r'''\scalebox{0.8}{\parbox{15cm}{
+            Let $\mmx = (\mmz, \mmv_1, \dots, \mmv_n, r)$:
+            \begin{myitemize}
+            \item If $\hat{r} \ge r^*$, then $\displaystyle \max_{\mmx\in\cc{A}} \min_{\mmy\in\cc{B}}\ \brmf(\mmx) \bullet \mmy = \lambda^* \ge 0$. 
+            \item If $\lambda^* < 0$, then $\cc{O}^* \cap \cc{A} = \varnothing$ and $\hat{r} < r^*$.
+            \end{myitemize}
+            }}''', up=geometry_ftp_proof_reduction[-1], buff=0.25)
+        )
+
+        self.play(FadeIn(geometry_ftp_proof_reduction[0]))
+        self.wait()
+        self.next_slide()
+
+        self.play(FadeIn(geometry_ftp_proof_reduction[1]))
+        self.wait()
+        self.next_slide()
+
+        self.play(FadeIn(geometry_ftp_proof_reduction[2]))
+        self.wait()
+        self.next_slide()
+
+        self.play(FadeIn(geometry_ftp_proof_reduction[3]))
+        self.wait()
+        self.next_slide()
+
+        self.play(FadeIn(geometry_ftp_proof_reduction[4]))
+        self.wait()
+        self.next_slide()
+
+        self.play(FadeIn(geometry_ftp_proof_reduction[5]))
+        self.wait()
+        self.next_slide()
+
+        self.play(
+            FadeOut(*geometry_ftp_proof_reduction[1:5]),
+            geometry_ftp_proof_reduction[5].animate.next_to(geometry_ftp_proof_reduction[0], DOWN, buff=0.25).to_edge(LEFT, buff=1))
+        self.wait()
+        self.next_slide()
+
+        geometry_ftp_proof_reduction.append( # 6
+            MyTex(r'''\scalebox{0.8}{\parbox{15cm}{
+            Solve the game up to an additive error of $\eps\hat{r} \over \sqrt{2}$:
+            \begin{myitemize}
+            \item If there exist $t$: $\displaystyle \max_{\mmx \in \cc{A}}\ \brmf(\mmx) \bullet \xt{\mmy}{t} < 0 \quad \Rightarrow \quad \lambda^* < 0 \text{ and } \hat{r} < r^*$
+            \end{myitemize}
+            }}''', up=geometry_ftp_proof_reduction[-1], buff=0.4)
+        )
+
+        geometry_ftp_proof_reduction.append( # 7
+            MyTex(r'''\scalebox{0.8}{\parbox{15cm}{
+            \begin{myitemize}
+            \item Conversely, if $\brmf(\xt{\mmx}{t}) \bullet \xt{\mmy}{t}\ge 0$ for all $t = 1, \dots, T$:
+                \begin{myitemize}
+                \item $\displaystyle 0 \le {1\over T} \sum_{t=1}^T \brmf(\xt{\mmx}{t}) \bullet \xt{\mmy}{t}$
+                \end{myitemize}
+            \end{myitemize}
+            }}''', up=geometry_ftp_proof_reduction[-1], buff=0.25)
+        )
+
+        geometry_ftp_proof_reduction.append( # 8
+            MyTex(r'''\scalebox{0.8}{\parbox{15cm}{
+            \begin{myitemize}
+            \item Conversely, if $\brmf(\xt{\mmx}{t}) \bullet \xt{\mmy}{t}\ge 0$ for all $t = 1, \dots, T$:
+                \begin{myitemize}
+                \item $\displaystyle 0 \le {1\over T} \sum_{t=1}^T \brmf(\xt{\mmx}{t}) \bullet \xt{\mmy}{t} \le \lambda_{\min}\big(\brmf(\tilde{\mmx})\big) + {\eps\hat{r}\over \sqrt{2}}$
+                \end{myitemize}
+            \end{myitemize}
+            }}''', up=geometry_ftp_proof_reduction[-2], buff=0.25)
+        )
+
+        geometry_ftp_proof_reduction.append( # 9
+            MyTex(r'''\scalebox{0.8}{\parbox{15cm}{
+            \begin{myitemize}
+            \item Conversely, if $\brmf(\xt{\mmx}{t}) \bullet \xt{\mmy}{t}\ge 0$ for all $t = 1, \dots, T$:
+                \begin{myitemize}
+                \item $\displaystyle 0 \le \lambda_{\min}\big( \cproduct_{i=1}^n (\tilde{\mmz} - \tilde{\mmv}_i, \tilde{r}) \big) + {\eps\hat{r}\over \sqrt{2}}$
+                \end{myitemize}
+            \end{myitemize}
+            }}''', up=geometry_ftp_proof_reduction[-3], buff=0.25)
+        )
+
+        geometry_ftp_proof_reduction.append( # 10
+            MyTex(r'''\scalebox{0.8}{\parbox{15cm}{
+            \begin{myitemize}
+            \item Conversely, if $\brmf(\xt{\mmx}{t}) \bullet \xt{\mmy}{t}\ge 0$ for all $t = 1, \dots, T$:
+                \begin{myitemize}
+                \item $\displaystyle \cproduct_{i=1}^n \begin{pmatrix} \tilde{\mmz} - \tilde{\mmv}_i\\ \tilde{r} \end{pmatrix} + {\eps\hat{r}\over \sqrt{2}} \cproduct_{i=1}^n \begin{pmatrix}\mmzero\\ \sqrt{2} \end{pmatrix} \in \cproduct_{i=1}^n \cc{Q}^{d+1}$
+                \end{myitemize}
+            \end{myitemize}
+            }}''', up=geometry_ftp_proof_reduction[-4], buff=0.25)
+        )
+
+        geometry_ftp_proof_reduction.append( # 11
+            MyTex(r'''\scalebox{0.8}{\parbox{15cm}{
+            \begin{myitemize}
+            \item Conversely, if $\brmf(\xt{\mmx}{t}) \bullet \xt{\mmy}{t}\ge 0$ for all $t = 1, \dots, T$:
+                \begin{myitemize}
+                \item $\displaystyle \cproduct_{i=1}^n \begin{pmatrix} \tilde{\mmz} - \tilde{\mmv}_i\\ \tilde{r} + \eps\hat{r} \end{pmatrix} \in \cproduct_{i=1}^n \cc{Q}^{d+1}$
+                \end{myitemize}
+            \end{myitemize}
+            }}''', up=geometry_ftp_proof_reduction[-5], buff=0.25)
+        )
+
+        geometry_ftp_proof_reduction.append( # 12
+            MyTex(r'''\scalebox{0.8}{\parbox{15cm}{
+            \begin{myitemize}
+            \item Conversely, if $\brmf(\xt{\mmx}{t}) \bullet \xt{\mmy}{t}\ge 0$ for all $t = 1, \dots, T$:
+                \begin{myitemize}
+                \item $\displaystyle \cproduct_{i=1}^n \begin{pmatrix} \tilde{\mmz} - \tilde{\mmv}_i\\ \tilde{r} + \eps\hat{r} \end{pmatrix} \in \cproduct_{i=1}^n \cc{Q}^{d+1}$
+                \item $(\tilde{\mmz}, \tilde{\mmv}_1, \dots, \tilde{\mmv}_n, \tilde{r} + \eps\hat{r})$ is a solution to FTP
+                \end{myitemize}
+            \end{myitemize}
+            }}''', up=geometry_ftp_proof_reduction[-6], buff=0.25)
+        )
+
+        self.play(FadeIn(geometry_ftp_proof_reduction[6]))
+        self.wait()
+        self.next_slide()
+
+        self.play(FadeIn(geometry_ftp_proof_reduction[7]))
+        self.wait()
+        self.next_slide()
+
+        for i in range(7, 12):
+            self.play(FadeOut(geometry_ftp_proof_reduction[i]), FadeIn(geometry_ftp_proof_reduction[i+1]))
+            self.wait()
+            self.next_slide()
+
+        self.play(FadeOut(
+            geometry_ftp_proof_reduction[0],
+            geometry_ftp_proof_reduction[5],
+            geometry_ftp_proof_reduction[6],
+            geometry_ftp_proof_reduction[12]
+        ))
+
+        geometry_ftp_proof_oracle = [
+            MyTex(r'''\scalebox{0.8}{\parbox{15cm}{
+            2. Implementation of {\sc Oracle}
+            }}''', up=subtitle_geometry).set_color(RED),
+        ]
+
+        geometry_ftp_proof_oracle.append( # 1
+            MyTex(r'''\scalebox{0.8}{\parbox{15cm}{
+            $\displaystyle \brmf(\mmx) = \cproduct_{i=1}^n \begin{pmatrix} \mmz - \mmv_i\\ r \end{pmatrix},\ \mmy = \cproduct_{i=1}^n \begin{pmatrix} \bar{\mmy}_i \\ y_{i,0} \end{pmatrix}$
+            }}''', up=geometry_ftp_proof_oracle[-1], buff=0.25)
+        )
+
+        geometry_ftp_proof_oracle.append( # 2
+            MyTex(r'''\scalebox{0.8}{\parbox{15cm}{
+            $\displaystyle \brmf(\mmx) \bullet \mmy = \big(\sum_{i=1}^n \bar{\mmy}_i \big)^T \mmz - \sum_{i=1}^n \bar{\mmy}_i^T \mmv_i + \big(\sum_{i=1}^n y_{i,0}\big)r$
+            }}''', up=geometry_ftp_proof_oracle[-1], buff=0.25)
+        )
+
+        geometry_ftp_proof_oracle.append( # 3
+            MyTex(r'''\scalebox{0.8}{\parbox{15cm}{
+            The {\sc Oracle} problem:
+            \begin{myitemize}
+            \item $\max\ \brmf(\mmx) \bullet \mmy \hspace{1em} {\rm s.t.}\ \mmx \in \cc{A}$
+            \end{myitemize}
+            }}''', up=geometry_ftp_proof_oracle[-1], buff=0.25)
+        )
+
+        geometry_ftp_proof_oracle.append( # 4
+            MyTex(r'''\scalebox{0.8}{\parbox{15cm}{
+            The {\sc Oracle} problem:
+            \begin{myitemize}
+            \item[] $\displaystyle
+            \begin{aligned}
+                \underset{\mmz, \mmv_1, \dots, \mmv_n, r}{\rm maximize}\quad & \big(\sum_{i=1}^n \bar{\mmy}_i \big)^T \mmz - \sum_{i=1}^n \bar{\mmy}_i^T \mmv_i + \big(\sum_{i=1}^n y_{i,0}\big)r\\
+                {\rm subject\ to} \quad
+                & \mmz \in \conv(\{\Omega_i\}_{i=1}^n),\\
+                & \mmv_i \in \Omega_i, \ \forall i \in [n],\\
+                & r \le \hat{r}.
+            \end{aligned}
+            $
+            \end{myitemize}
+            }}''', up=geometry_ftp_proof_oracle[-2], buff=0.25)
+        )
+
+        self.play(FadeIn(geometry_ftp_proof_oracle[0]))
+        self.wait()
+        self.next_slide()
+
+        self.play(FadeIn(geometry_ftp_proof_oracle[1]))
+        self.wait()
+        self.next_slide()
+
+        self.play(FadeIn(geometry_ftp_proof_oracle[2]))
+        self.wait()
+        self.next_slide()
+
+        self.play(FadeIn(geometry_ftp_proof_oracle[3]))
+        self.wait()
+        self.next_slide()
+
+        self.play(FadeIn(geometry_ftp_proof_oracle[4]), FadeOut(geometry_ftp_proof_oracle[3]))
+        self.wait()
+        self.next_slide()
+
+        self.play(FadeOut(*geometry_ftp_proof_oracle[1:4]),
+            geometry_ftp_proof_oracle[4].animate.next_to(geometry_ftp_proof_oracle[0], DOWN, buff=0.25).to_edge(LEFT, buff=1)
+        )
+        self.wait()
+        self.next_slide()
+        
+        geometry_ftp_proof_oracle.append( # 5
+            MyTex(r'''\scalebox{0.8}{\parbox{15cm}{
+            The problems for $\mmz$, each $\mmv_i$ and $r$ can be solved separately!
+            }}''', up=geometry_ftp_proof_oracle[-1], buff=0.25).set_color(GREEN)
+        )
+
+        self.play(FadeIn(geometry_ftp_proof_oracle[5]))
+        self.wait()
+        self.next_slide()
+        
+        geometry_ftp_proof_oracle.append( # 6
+            MyTex(r'''\scalebox{0.8}{\parbox{15cm}{
+            \begin{myitemize}
+            \item For $\mmz$, let $\displaystyle \mmh = \sum_{i=1}^n \bar{\mmy}_i$, the subproblem is
+                $\displaystyle \max\Big\{ \mmh^T \mmz : \mmz \in \conv(\{\Omega_i\}_{i=1}^n) \Big\}$
+            \end{myitemize}
+            }}''', up=geometry_ftp_proof_oracle[-1], buff=0.25)
+        )
+
+        geometry_ftp_proof_oracle.append( # 7
+            MyTex(r'''\scalebox{0.8}{\parbox{15cm}{
+            \begin{myitemize}
+            \item For $\mmz$, let $\displaystyle \mmh = \sum_{i=1}^n \bar{\mmy}_i$, the subproblem is
+                $\displaystyle \max_{i\in [n]}\Big( \max \big\{ \mmh^T \mmz : \mmz \in \Omega_i \big\} \Big)$
+            \end{myitemize}
+            }}''', up=geometry_ftp_proof_oracle[-2], buff=0.25)
+        )
+
+        self.play(FadeIn(geometry_ftp_proof_oracle[6]))
+        self.wait()
+        self.next_slide()
+
+        self.play(FadeIn(geometry_ftp_proof_oracle[7]), FadeOut(geometry_ftp_proof_oracle[6]))
+        self.wait()
+        self.next_slide()
+
+        geometry_ftp_proof_oracle.append( # 8
+            MyTex(r'''\scalebox{0.8}{\parbox{15cm}{
+            \begin{myitemize}
+            \item For $\mmz$, let $\displaystyle \mmh = \sum_{i=1}^n \bar{\mmy}_i$, the subproblem is
+                $\displaystyle \max_{i\in [n]}\Big( \max \big\{ \mmh^T \mmz : \mmz \in \Omega_i \big\} \Big)$
+            \item For $\mmv_i$, the subproblem is $\min\big\{\bar{\mmy}_i^T \mmv_i : \mmv_i \in \Omega_i \big\}$
+            \end{myitemize}
+            }}''', up=geometry_ftp_proof_oracle[-3], buff=0.25)
+        )
+
+        self.play(FadeIn(geometry_ftp_proof_oracle[8]), FadeOut(geometry_ftp_proof_oracle[7]))
+        self.wait()
+        self.next_slide()
+
+        geometry_ftp_proof_oracle.append( # 9
+            MyTex(r'''\scalebox{0.8}{\parbox{15cm}{
+            \begin{myitemize}
+            \item For $\mmz$, let $\displaystyle \mmh = \sum_{i=1}^n \bar{\mmy}_i$, the subproblem is
+                $\displaystyle \max_{i\in [n]}\Big( \max \big\{ \mmh^T \mmz : \mmz \in \Omega_i \big\} \Big)$
+            \item For $\mmv_i$, the subproblem is $\min\big\{\bar{\mmy}_i^T \mmv_i : \mmv_i \in \Omega_i \big\}$
+            \item For $r$, $r = \hat{r}$
+            \end{myitemize}
+            }}''', up=geometry_ftp_proof_oracle[-4], buff=0.25)
+        )
+
+        self.play(FadeIn(geometry_ftp_proof_oracle[9]), FadeOut(geometry_ftp_proof_oracle[8]))
+        self.wait()
+        self.next_slide()
 
         ## 1. Polytope Distance / Hard-SVM
         # self.play(Create(geoemtry_subtitles[0]))
@@ -1144,55 +1594,55 @@ class Presentation(Slide):
         # self.wait()
         # self.next_slide()
 
-        geometry_pd_prob = [
-            MyTex(r'''
-            Polytope distance:
-            ''', up=subtitle_geometry).set_color(YELLOW),
-            MyTex(r'''
-            \[
-            \begin{aligned}
-                \minimize_{\mmgamma,\ \mmmu}\quad & \|\mmP\mmgamma - \mmQ\mmmu\|\\
-                \subto\quad & \mmone^T \mmgamma = 1, \ \mmgamma \ge 0, \\
-                & \mmone^T \mmmu = 1, \ \mmmu \ge 0.
-            \end{aligned}
-            \]
-            ''')
-        ]
-        geometry_pd_prob[1].next_to(geometry_pd_prob[0], DOWN, buff=0.25).to_edge(LEFT, 1.5)
-        geometry_pd_prob = Group(*geometry_pd_prob)
+        # geometry_pd_prob = [
+        #     MyTex(r'''
+        #     Polytope distance:
+        #     ''', up=subtitle_geometry).set_color(YELLOW),
+        #     MyTex(r'''
+        #     \[
+        #     \begin{aligned}
+        #         \minimize_{\mmgamma,\ \mmmu}\quad & \|\mmP\mmgamma - \mmQ\mmmu\|\\
+        #         \subto\quad & \mmone^T \mmgamma = 1, \ \mmgamma \ge 0, \\
+        #         & \mmone^T \mmmu = 1, \ \mmmu \ge 0.
+        #     \end{aligned}
+        #     \]
+        #     ''')
+        # ]
+        # geometry_pd_prob[1].next_to(geometry_pd_prob[0], DOWN, buff=0.25).to_edge(LEFT, 1.5)
+        # geometry_pd_prob = Group(*geometry_pd_prob)
 
         # self.play(FadeIn(geometry_pd_prob), geometry_pd_draw_group.animate.scale(0.4).next_to(geometry_pd_prob, RIGHT).to_edge(RIGHT, buff=3))
         # self.wait()
         # self.next_slide()
 
 
-        geometry_svm_prob_tex = [
-            MyTex(r'''
-            Support vector machine:
-            ''', up=geometry_pd_prob).set_color(YELLOW),
-            MyTex(r'''
-            \[
-            \begin{aligned}
-            \maximize_{\mmw, s_1, s_2}\quad & s_1 + s_2                             \\
-            \subto\quad                & \mmP^T \mmw - s_1 \mmone \ge 0,  \\
-                                        & -\mmQ^T \mmw - s_2 \mmone \ge 0, \\
-                                        & \|\mmw\| \le 1.
-            \end{aligned}
-            \]
-            '''),
-            MyTex(r'''
-            \[
-            \begin{aligned}
-            \maximize_{\mmw, s_1, s_2}\quad & s_1 + s_2                             \\
-            \subto\quad                & \mmP^T \mmw - s_1 \mmone \in \bR^{m_1}_+,  \\
-                                        & -\mmQ^T \mmw - s_2 \mmone \in \bR^{m_2}_+, \\
-                                        & \|\mmw\| \le 1.
-            \end{aligned}
-            \]
-            ''')
-        ]
-        geometry_svm_prob_tex[1].next_to(geometry_svm_prob_tex[0], DOWN, buff=0.25).to_edge(LEFT, 1.5)
-        geometry_svm_prob = Group(geometry_svm_prob_tex[0], geometry_svm_prob_tex[1])
+        # geometry_svm_prob_tex = [
+        #     MyTex(r'''
+        #     Support vector machine:
+        #     ''', up=geometry_pd_prob).set_color(YELLOW),
+        #     MyTex(r'''
+        #     \[
+        #     \begin{aligned}
+        #     \maximize_{\mmw, s_1, s_2}\quad & s_1 + s_2                             \\
+        #     \subto\quad                & \mmP^T \mmw - s_1 \mmone \ge 0,  \\
+        #                                 & -\mmQ^T \mmw - s_2 \mmone \ge 0, \\
+        #                                 & \|\mmw\| \le 1.
+        #     \end{aligned}
+        #     \]
+        #     '''),
+        #     MyTex(r'''
+        #     \[
+        #     \begin{aligned}
+        #     \maximize_{\mmw, s_1, s_2}\quad & s_1 + s_2                             \\
+        #     \subto\quad                & \mmP^T \mmw - s_1 \mmone \in \bR^{m_1}_+,  \\
+        #                                 & -\mmQ^T \mmw - s_2 \mmone \in \bR^{m_2}_+, \\
+        #                                 & \|\mmw\| \le 1.
+        #     \end{aligned}
+        #     \]
+        #     ''')
+        # ]
+        # geometry_svm_prob_tex[1].next_to(geometry_svm_prob_tex[0], DOWN, buff=0.25).to_edge(LEFT, 1.5)
+        # geometry_svm_prob = Group(geometry_svm_prob_tex[0], geometry_svm_prob_tex[1])
 
         # geometry_svm_draw_group.scale(0.4).next_to(geometry_svm_prob, RIGHT).to_edge(RIGHT, buff=3)
 
@@ -1210,118 +1660,111 @@ class Presentation(Slide):
         # self.wait()
         # self.next_slide()
         
-        geometry_svm_bound_claim = Theorem(r'''
-            {\bf\underline{Claim:}} Any feasible solution to SVM satisfies $s_1 \le D$, $s_2 \le D$, where $D$ is the maximum norm of the input points.
-            ''', edge_color=BLUE)
+        # geometry_svm_bound_claim = Theorem(r'''
+        #     {\bf\underline{Claim:}} Any feasible solution to SVM satisfies $s_1 \le D$, $s_2 \le D$, where $D$ is the maximum norm of the input points.
+        #     ''', edge_color=BLUE)
 
-        self.play(FadeIn(geometry_svm_bound_claim.shift(DOWN)))
-        self.wait()
-        self.next_slide()
+        # self.play(FadeIn(geometry_svm_bound_claim.shift(DOWN)))
+        # self.wait()
+        # self.next_slide()
 
-        self.play(geometry_svm_bound_claim.animate.scale(0.5).to_edge(UR, buff=0.5))
-        self.wait()
-        self.next_slide()
+        # self.play(geometry_svm_bound_claim.animate.scale(0.5).to_edge(UR, buff=0.5))
+        # self.wait()
+        # self.next_slide()
 
-        geometry_svm_prob_tex[2].next_to(geometry_svm_prob_tex[0], DOWN, buff=0.25).to_edge(LEFT, 1.5)
+        # geometry_svm_prob_tex[2].next_to(geometry_svm_prob_tex[0], DOWN, buff=0.25).to_edge(LEFT, 1.5)
 
-        self.play(FadeOut(geometry_svm_prob_tex[1]), FadeIn(geometry_svm_prob_tex[2]))
-        self.wait()
-        self.next_slide()
-
-
-        geometry_svm_ftp = [
-            MyTex(r'''
-                Feasibility test problem:\\
-                Find $\mmw, s_1, s_2$ such that
-            ''').set_color(YELLOW),
-            MyTex(r'''
-                \[
-                \begin{aligned}
-                & s_1 + s_2 \ge \hat{\alpha} \\
-                & \mmP^T \mmw - s_1 \mmone \in \bR^{m_1}_+,  \\
-                & -\mmQ^T \mmw - s_2 \mmone \in \bR^{m_2}_+, \\
-                & \|\mmw\| \le 1.
-                \end{aligned}
-            \]'''),
-            MyTex(r'''
-                \[
-                \begin{aligned}
-                & s_1 + s_2 \ge (1 - \eps) \hat{\alpha} \\
-                & \mmP^T \mmw - s_1 \mmone \in \bR^{m_1}_+,  \\
-                & -\mmQ^T \mmw - s_2 \mmone \in \bR^{m_2}_+, \\
-                & s_1 \le D,\ s_2 \le D, \\
-                & \|\mmw\| \le 1.
-                \end{aligned}
-            \]''')
-        ]
-        geometry_svm_ftp[0][0][-19:].set_color(WHITE)
-        geometry_svm_ftp[0].next_to(geometry_svm_prob, RIGHT, buff=1).to_edge(UP, buff=2)
-        geometry_svm_ftp[1].next_to(geometry_svm_ftp[0], DOWN, buff=0.25).shift([geometry_svm_ftp[0].get_left()[0] - geometry_svm_ftp[1].get_left()[0] + 0.5, 0, 0])
-        geometry_svm_ftp[2].next_to(geometry_svm_ftp[0], DOWN, buff=0.25).shift([geometry_svm_ftp[0].get_left()[0] - geometry_svm_ftp[2].get_left()[0] + 0.5, 0, 0])
-
-        self.play(FadeIn(geometry_svm_ftp[0], geometry_svm_ftp[1]))
-        self.wait()
-        self.next_slide()
-
-        self.play(FadeOut(geometry_svm_ftp[1]), FadeIn(geometry_svm_ftp[2]))
-        self.wait()
-        self.next_slide()
+        # self.play(FadeOut(geometry_svm_prob_tex[1]), FadeIn(geometry_svm_prob_tex[2]))
+        # self.wait()
+        # self.next_slide()
 
 
-        geometry_svm_ftp_thm = Theorem(r'''
-            {\bf\underline{Thm:}}
-            There is an iterative algorithm that solves FTP in $O({D^2 \log M \over \eps^2 \hat{\alpha}^2})$ iterations, with a running time of $O(N + d)$ per iteration.
-        ''').next_to(geometry_svm_ftp[2], DOWN)
-        geometry_svm_ftp_thm.shift([-geometry_svm_ftp_thm.get_center()[0], 0, 0])
+        # geometry_svm_ftp = [
+        #     MyTex(r'''
+        #         Feasibility test problem:\\
+        #         Find $\mmw, s_1, s_2$ such that
+        #     ''').set_color(YELLOW),
+        #     MyTex(r'''
+        #         \[
+        #         \begin{aligned}
+        #         & s_1 + s_2 \ge \hat{\alpha} \\
+        #         & \mmP^T \mmw - s_1 \mmone \in \bR^{m_1}_+,  \\
+        #         & -\mmQ^T \mmw - s_2 \mmone \in \bR^{m_2}_+, \\
+        #         & \|\mmw\| \le 1.
+        #         \end{aligned}
+        #     \]'''),
+        #     MyTex(r'''
+        #         \[
+        #         \begin{aligned}
+        #         & s_1 + s_2 \ge (1 - \eps) \hat{\alpha} \\
+        #         & \mmP^T \mmw - s_1 \mmone \in \bR^{m_1}_+,  \\
+        #         & -\mmQ^T \mmw - s_2 \mmone \in \bR^{m_2}_+, \\
+        #         & s_1 \le D,\ s_2 \le D, \\
+        #         & \|\mmw\| \le 1.
+        #         \end{aligned}
+        #     \]''')
+        # ]
+        # geometry_svm_ftp[0][0][-19:].set_color(WHITE)
+        # geometry_svm_ftp[0].next_to(geometry_svm_prob, RIGHT, buff=1).to_edge(UP, buff=2)
+        # geometry_svm_ftp[1].next_to(geometry_svm_ftp[0], DOWN, buff=0.25).shift([geometry_svm_ftp[0].get_left()[0] - geometry_svm_ftp[1].get_left()[0] + 0.5, 0, 0])
+        # geometry_svm_ftp[2].next_to(geometry_svm_ftp[0], DOWN, buff=0.25).shift([geometry_svm_ftp[0].get_left()[0] - geometry_svm_ftp[2].get_left()[0] + 0.5, 0, 0])
 
-        self.play(FadeIn(geometry_svm_ftp_thm))
-        self.wait()
-        self.next_slide()
+        # self.play(FadeIn(geometry_svm_ftp[0], geometry_svm_ftp[1]))
+        # self.wait()
+        # self.next_slide()
 
-        self.play(geometry_svm_ftp_thm.animate.scale(0.5).next_to(geometry_svm_bound_claim, DOWN, buff=0.1).to_edge(RIGHT, buff=0.5),
-            FadeOut(geometry_svm_prob_tex[0], geometry_svm_prob_tex[2])
-        )
-        self.play(Group(geometry_svm_ftp[0], geometry_svm_ftp[2]).animate.scale(0.8).next_to(geometry_svm_ftp_thm, DOWN, buff=0.3).to_edge(RIGHT, buff=1))
-        self.wait()
-        self.next_slide()
+        # self.play(FadeOut(geometry_svm_ftp[1]), FadeIn(geometry_svm_ftp[2]))
+        # self.wait()
+        # self.next_slide()
 
-        geometry_svm_ftp_proof = [
-            MyTex(r'''\scalebox{0.85}{\parbox{10cm}{
-            1. Reduction to zero-sum game
-            \begin{myitemize}
-            \item $\cc{K} = \bR^M_+$, $\displaystyle\brmf(\mmw, s_1, s_2) = \begin{pmatrix}\mmP^T \mmw - s_1 \mmone \\- \mmQ^T \mmw - s_2 \mmone\end{pmatrix}$
-            \item $\cc{A} = \Big\{(\mmw, s_1, s_2) \in \bU : s_1 + s_2 \ge \hat{\alpha},\ s_1 \le D,\ s_2 \le D,\ \|\mmw\| \le 1 \Big\}$
-            \item If $\hat{\alpha} \le \alpha^*$, $\displaystyle\max_{\mmx\in \cc{A}} \min_{\mmy \in \cc{B}} \ \brmf(\mmx) \bullet \mmy \ge 0$
-            \item Solve the game up to additive error $\eps\hat{\alpha} / 2$
-            \item If exists $t$: $\displaystyle\max_{\mmx \in \cc{A}}\ \brmf(\mmx) \bullet \xt{\mmy}{t} < 0$, then $\lambda^* < 0$ and $\hat{\alpha} > \alpha^*$
-            \item Otherwise $(\tilde{w}, \tilde{s}_1 - {\eps\over 2}, \tilde{s}_2 - {\eps\over 2})$ is a solution to FTP
-            \end{myitemize}
-            }} ''', up=subtitle_geometry),
-            MyTex(r'''\scalebox{0.85}{\parbox{10cm}{
-            2. Implementation of {\sc Oracle}
-            \begin{myitemize}
-            \item $\cc{K} = \bR^M_+$, $\displaystyle\brmf(\mmw, s_1, s_2) = \begin{pmatrix}\mmP^T \mmw - s_1 \mmone \\- \mmQ^T \mmw - s_2 \mmone\end{pmatrix}$
-            \item $\cc{A} = \Big\{(\mmw, s_1, s_2) \in \bU : s_1 + s_2 \ge \hat{\alpha},\ s_1 \le D,\ s_2 \le D,\ \|\mmw\| \le 1 \Big\}$
-            \item If $\hat{\alpha} \le \alpha^*$, $\displaystyle\max_{\mmx\in \cc{A}} \min_{\mmy \in \cc{B}} \ \brmf(\mmx) \bullet \mmy \ge 0$
-            \item Solve the game up to additive error $\eps\hat{\alpha} / 2$
-            \item If exists $t$: $\displaystyle\max_{\mmx \in \cc{A}}\ \brmf(\mmx) \bullet \xt{\mmy}{t} < 0$, then $\lambda^* < 0$ and $\hat{\alpha} > \alpha^*$
-            \item Otherwise $(\tilde{w}, \tilde{s}_1 - {\eps\over 2}, \tilde{s}_2 - {\eps\over 2})$ is a solution to FTP
-            \end{myitemize}
-            }} ''', up=subtitle_geometry),
-        ]
 
-        geometry_svm_ftp_proof[0][0][:25].set_color(RED)
+        # geometry_svm_ftp_thm = Theorem(r'''
+        #     {\bf\underline{Thm:}}
+        #     There is an iterative algorithm that solves FTP in $O({D^2 \log M \over \eps^2 \hat{\alpha}^2})$ iterations, with a running time of $O(N + d)$ per iteration.
+        # ''').next_to(geometry_svm_ftp[2], DOWN)
+        # geometry_svm_ftp_thm.shift([-geometry_svm_ftp_thm.get_center()[0], 0, 0])
 
-        self.play(FadeIn(geometry_svm_ftp_proof[0]))
-        self.wait()
-        self.next_slide()
+        # self.play(FadeIn(geometry_svm_ftp_thm))
+        # self.wait()
+        # self.next_slide()
 
-        ## 2. SEBB
+        # self.play(geometry_svm_ftp_thm.animate.scale(0.5).next_to(geometry_svm_bound_claim, DOWN, buff=0.1).to_edge(RIGHT, buff=0.5),
+        #     FadeOut(geometry_svm_prob_tex[0], geometry_svm_prob_tex[2])
+        # )
+        # self.play(Group(geometry_svm_ftp[0], geometry_svm_ftp[2]).animate.scale(0.8).next_to(geometry_svm_ftp_thm, DOWN, buff=0.3).to_edge(RIGHT, buff=1))
+        # self.wait()
+        # self.next_slide()
 
-        ## 3. SIB
+        # geometry_svm_ftp_proof = [
+        #     MyTex(r'''\scalebox{0.85}{\parbox{10cm}{
+        #     1. Reduction to zero-sum game
+        #     \begin{myitemize}
+        #     \item $\cc{K} = \bR^M_+$, $\displaystyle\brmf(\mmw, s_1, s_2) = \begin{pmatrix}\mmP^T \mmw - s_1 \mmone \\- \mmQ^T \mmw - s_2 \mmone\end{pmatrix}$
+        #     \item $\cc{A} = \Big\{(\mmw, s_1, s_2) \in \bU : s_1 + s_2 \ge \hat{\alpha},\ s_1 \le D,\ s_2 \le D,\ \|\mmw\| \le 1 \Big\}$
+        #     \item If $\hat{\alpha} \le \alpha^*$, $\displaystyle\max_{\mmx\in \cc{A}} \min_{\mmy \in \cc{B}} \ \brmf(\mmx) \bullet \mmy \ge 0$
+        #     \item Solve the game up to additive error $\eps\hat{\alpha} / 2$
+        #     \item If exists $t$: $\displaystyle\max_{\mmx \in \cc{A}}\ \brmf(\mmx) \bullet \xt{\mmy}{t} < 0$, then $\lambda^* < 0$ and $\hat{\alpha} > \alpha^*$
+        #     \item Otherwise $(\tilde{w}, \tilde{s}_1 - {\eps\over 2}, \tilde{s}_2 - {\eps\over 2})$ is a solution to FTP
+        #     \end{myitemize}
+        #     }} ''', up=subtitle_geometry),
+        #     MyTex(r'''\scalebox{0.85}{\parbox{10cm}{
+        #     2. Implementation of {\sc Oracle}
+        #     \begin{myitemize}
+        #     \item $\cc{K} = \bR^M_+$, $\displaystyle\brmf(\mmw, s_1, s_2) = \begin{pmatrix}\mmP^T \mmw - s_1 \mmone \\- \mmQ^T \mmw - s_2 \mmone\end{pmatrix}$
+        #     \item $\cc{A} = \Big\{(\mmw, s_1, s_2) \in \bU : s_1 + s_2 \ge \hat{\alpha},\ s_1 \le D,\ s_2 \le D,\ \|\mmw\| \le 1 \Big\}$
+        #     \item If $\hat{\alpha} \le \alpha^*$, $\displaystyle\max_{\mmx\in \cc{A}} \min_{\mmy \in \cc{B}} \ \brmf(\mmx) \bullet \mmy \ge 0$
+        #     \item Solve the game up to additive error $\eps\hat{\alpha} / 2$
+        #     \item If exists $t$: $\displaystyle\max_{\mmx \in \cc{A}}\ \brmf(\mmx) \bullet \xt{\mmy}{t} < 0$, then $\lambda^* < 0$ and $\hat{\alpha} > \alpha^*$
+        #     \item Otherwise $(\tilde{w}, \tilde{s}_1 - {\eps\over 2}, \tilde{s}_2 - {\eps\over 2})$ is a solution to FTP
+        #     \end{myitemize}
+        #     }} ''', up=subtitle_geometry),
+        # ]
 
-        ## 4. Soft-SIB
+        # geometry_svm_ftp_proof[0][0][:25].set_color(RED)
 
+        # self.play(FadeIn(geometry_svm_ftp_proof[0]))
+        # self.wait()
+        # self.next_slide()
 
         # # Symmetric Cone Programming ##################################################################################
 
