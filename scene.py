@@ -1256,14 +1256,14 @@ class Presentation(Slide):
         self.next_slide()
 
         self.play(geometry_sib_ftp_thm.animate.scale(0.5).next_to(geometry_sib_claim, DOWN, buff=0.1).to_edge(RIGHT, buff=0.5))
-        self.play(Group(geometry_sib_ftp_question[2], geometry_sib_ftp[0], geometry_sib_ftp[2]).animate.scale(0.5).next_to(geometry_sib_ftp_thm, DOWN, buff=0.25).to_edge(RIGHT, buff=1))
+        self.play(Group(geometry_sib_ftp_question[2], geometry_sib_ftp[0], geometry_sib_ftp[2]).animate.scale(0.7).next_to(geometry_sib_ftp_thm, DOWN, buff=0.25).to_edge(RIGHT, buff=1))
         self.wait()
         self.next_slide()
 
         geometry_ftp_proof_reduction = [
             MyTex(r'''\scalebox{0.8}{\parbox{15cm}{
             1. Reduction to zero-sum game
-            }}''', up=subtitle_geometry).set_color(RED),
+            }}''', up=subtitle_geometry).set_color(YELLOW),
         ]
         geometry_ftp_proof_reduction.append( # 1
             MyTex(r'''\scalebox{0.8}{\parbox{15cm}{
@@ -1424,7 +1424,7 @@ class Presentation(Slide):
         geometry_ftp_proof_oracle = [
             MyTex(r'''\scalebox{0.8}{\parbox{15cm}{
             2. Implementation of {\sc Oracle}
-            }}''', up=subtitle_geometry).set_color(RED),
+            }}''', up=subtitle_geometry).set_color(YELLOW),
         ]
 
         geometry_ftp_proof_oracle.append( # 1
@@ -1485,7 +1485,7 @@ class Presentation(Slide):
         self.wait()
         self.next_slide()
 
-        self.play(FadeOut(*geometry_ftp_proof_oracle[1:4]),
+        self.play(FadeOut(*geometry_ftp_proof_oracle[1:3]),
             geometry_ftp_proof_oracle[4].animate.next_to(geometry_ftp_proof_oracle[0], DOWN, buff=0.25).to_edge(LEFT, buff=1)
         )
         self.wait()
@@ -1555,6 +1555,338 @@ class Presentation(Slide):
         self.play(FadeIn(geometry_ftp_proof_oracle[9]), FadeOut(geometry_ftp_proof_oracle[8]))
         self.wait()
         self.next_slide()
+
+        geometry_ftp_proof_width = [
+            MyTex(r'''\scalebox{0.8}{\parbox{15cm}{
+            3. Width of {\sc Oracle}
+            }}''', up=subtitle_geometry).set_color(YELLOW),
+        ]
+
+        geometry_ftp_proof_width.append( # 1
+            MyTex(r'''\scalebox{0.8}{\parbox{15cm}{
+            Let $(\mmz, \mmv_1, \dots, \mmv_n, r)$ be the output of {\sc Oracle}:
+            \begin{myitemize}
+            \item[] $\displaystyle 
+                \begin{aligned}
+                    \Big\|\cproduct_{i=1}^n (\mmz - \mmv_i, r)\Big\|_\infty 
+                    &= \max_{k\in [2n]}\ \Big|\lambda_{k}\big(\cproduct_{i=1}^n (\mmz - \mmv_i, r)\big) \Big| \\
+                    &\le {1\over \sqrt{2}} \max_{i\in [n]}\ \|\mmz - \mmv_i\| + r\\
+                    &\le {1\over \sqrt{2}} (D + \hat{r})\\
+                    &\le \sqrt{2} D.
+                \end{aligned}$
+            \end{myitemize}
+            }}''', up=geometry_ftp_proof_width[-1], buff=0.25)
+        )
+
+        self.play(FadeOut(
+            geometry_ftp_proof_oracle[9],
+            geometry_ftp_proof_oracle[5],
+            geometry_ftp_proof_oracle[4],
+            geometry_ftp_proof_oracle[0]
+            ),
+            FadeIn(geometry_ftp_proof_width[0])
+        )
+        self.wait()
+        self.next_slide()
+
+        self.play(FadeIn(geometry_ftp_proof_width[1]))
+        self.wait()
+        self.next_slide()
+
+        geometry_ftp_proof_time = [
+            MyTex(r'''\scalebox{0.8}{\parbox{15cm}{
+            4. Running time analysis
+            }}''', up=subtitle_geometry).set_color(YELLOW),
+        ]
+
+        self.play(FadeOut(
+                *geometry_ftp_proof_width
+            ),
+            FadeIn(geometry_ftp_proof_time[0])
+        )
+        self.wait()
+        self.next_slide()
+
+        geometry_ftp_proof_time.append( # 1
+            MyTex(r'''\scalebox{0.8}{\parbox{15cm}{
+            Number of iterations:
+            }}''', up=geometry_ftp_proof_time[-1], buff=0.25).set_color(GREEN)
+        )
+
+        self.play(FadeIn(geometry_ftp_proof_time[-1]))
+        self.wait()
+        self.next_slide()
+
+        geometry_ftp_proof_time.append( # 2
+            MyTex(r'''\scalebox{0.8}{\parbox{15cm}{
+            \begin{myitemize}
+            \item $\rho = \sqrt{2}D,\ r = 2n,\ \eps = {\eps\hat{r}\over \sqrt{2}} \quad \Rightarrow \quad T = \lceil{16 D^2 \ln(2n) \over \eps^2 \hat{r}^2}\rceil$
+            \end{myitemize}
+            }}''', up=geometry_ftp_proof_time[-1], buff=0.25)
+        )
+        geometry_ftp_proof_time[-1][0][-21:].set_color(RED)
+
+        self.play(FadeIn(geometry_ftp_proof_time[-1]))
+        self.wait()
+        self.next_slide()
+
+        geometry_ftp_proof_time.append( # 3
+            MyTex(r'''\scalebox{0.8}{\parbox{15cm}{
+            Symmetric cone multiplicative weights update:
+            }}''', up=geometry_ftp_proof_time[-1], buff=0.25).set_color(GREEN)
+        )
+
+        self.play(FadeIn(geometry_ftp_proof_time[-1]))
+        self.wait()
+        self.next_slide()
+
+        geometry_ftp_proof_time.append( # 4
+            MyTex(r'''\scalebox{0.8}{\parbox{15cm}{
+            \begin{myitemize}
+            \item $\displaystyle \xt{\mmy}{t+1} = \frac
+                {\mmexp(-\frac{\eta}{\rho}\sum_{\tau = 1}^{t} \brmf(\xt{\mmx}{\tau}))}
+                {\Tr\big(\mmexp(-\frac{\eta}{\rho}\sum_{\tau = 1}^{t} \brmf(\xt{\mmx}{\tau}))\big)}
+                \in \cproduct_{i=1}^n \cc{Q}^{d+1} \quad \Rightarrow \quad O(nd)$
+            \end{myitemize}
+            }}''', up=geometry_ftp_proof_time[-1], buff=0.25)
+        )
+        geometry_ftp_proof_time[-1][0][-6:].set_color(RED)
+
+        self.play(FadeIn(geometry_ftp_proof_time[-1]))
+        self.wait()
+        self.next_slide()
+
+        geometry_ftp_proof_time.append( # 5
+            MyTex(r'''\scalebox{0.8}{\parbox{15cm}{
+            The {\sc Oracle} process:
+            }}''', up=geometry_ftp_proof_time[-1], buff=0.25).set_color(GREEN)
+        )
+
+        self.play(FadeIn(geometry_ftp_proof_time[-1]))
+        self.wait()
+        self.next_slide()
+
+        geometry_ftp_proof_time.append( # 6
+            MyTex(r'''\scalebox{0.8}{\parbox{15cm}{
+            \begin{myitemize}
+            \item Computing $\displaystyle \mmh = \sum_{i=1}^n \bar{\mmy}_i \quad \Rightarrow \quad O(nd)$
+            \end{myitemize}
+            }}''', up=geometry_ftp_proof_time[-1], buff=0.25)
+        )
+        geometry_ftp_proof_time[-1][0][-6:].set_color(RED)
+
+        self.play(FadeIn(geometry_ftp_proof_time[-1]))
+        self.wait()
+        self.next_slide()
+
+        geometry_ftp_proof_time.append( # 7
+            MyTex(r'''\scalebox{0.8}{\parbox{15cm}{
+            \begin{myitemize}
+            \item Solving $\displaystyle \max_{i\in [n]}\Big( \max\big\{\mmh^T \mmz : \mmz \in \Omega_i\big\} \Big) \quad \Rightarrow \quad O(S)$
+            \end{myitemize}
+            }}''', up=geometry_ftp_proof_time[-1], buff=0.25)
+        )
+        geometry_ftp_proof_time[-1][0][-5:].set_color(RED)
+
+        self.play(FadeIn(geometry_ftp_proof_time[-1]))
+        self.wait()
+        self.next_slide()
+
+        geometry_ftp_proof_time.append( # 8
+            MyTex(r'''\scalebox{0.8}{\parbox{15cm}{
+            \begin{myitemize}
+            \item Solving $\displaystyle \min\big\{\bar{\mmy}_i^T \mmv_i : \mmv_i \in \Omega_i\big\}$ for $i=1,\dots, n \quad \Rightarrow \quad O(S)$
+            \end{myitemize}
+            }}''', up=geometry_ftp_proof_time[-1], buff=0.25)
+        )
+        geometry_ftp_proof_time[-1][0][-5:].set_color(RED)
+
+        self.play(FadeIn(geometry_ftp_proof_time[-1]))
+        self.wait()
+        self.next_slide()
+
+        geometry_sib_opt_thm = Theorem(r'''
+        {\bf\underline{Thm:}}
+        Let $R$ be the ratio ${D \over r^*}$. There is an algorithm that computes an $(1 + \eps)$-approximate SIB in $O({R^2 (S + nd) \log n \over \eps^2})$ time.
+        ''', edge_color=RED)
+
+        self.play(
+            FadeOut(*geometry_ftp_proof_time, Group(geometry_sib_ftp_question[2], geometry_sib_ftp[0], geometry_sib_ftp[2])),
+            FadeIn(geometry_sib_opt_thm)
+        )
+        self.wait()
+        self.next_slide()
+
+        self.play(
+            geometry_sib_opt_thm.animate.scale(0.5).next_to(geometry_sib_ftp_thm, DOWN, buff=0.1).to_edge(RIGHT, buff=0.5)
+        )
+        self.wait()
+        self.next_slide()
+
+        geometry_sib_opt_proof = [
+            MyTex(r'''\scalebox{0.8}{\parbox{15cm}{
+            1. From FTP to optimization
+            }}''', up=subtitle_geometry).set_color(RED),
+        ]
+
+        self.play(FadeIn(geometry_sib_opt_proof[-1]))
+        self.wait()
+        self.next_slide()
+
+        geometry_sib_opt_proof.append( # 1
+            MyTex(r'''\scalebox{0.8}{\parbox{15cm}{
+            Adaptively choose $\hat{r}$ and $\eps$
+            }}''', up=geometry_sib_opt_proof[-1], buff=0.25)
+        )
+
+        self.play(FadeIn(geometry_sib_opt_proof[-1]))
+        self.wait()
+        self.next_slide()
+
+        geometry_sib_opt_proof.append( # 2
+            MyTex(r'''\scalebox{0.8}{\parbox{15cm}{
+            2. How to compute the diameter $D$?
+            }}''', up=geometry_sib_opt_proof[-1], buff=0.5).set_color(RED)
+        )
+
+        self.play(FadeIn(geometry_sib_opt_proof[-1]))
+        self.wait()
+        self.next_slide()
+        
+        geometry_sib_opt_proof.append( # 3
+            MyTex(r'''\scalebox{0.8}{\parbox{15cm}{
+            2. How to compute the diameter $D$? We don't!
+            }}''', up=geometry_sib_opt_proof[-2], buff=0.5).set_color(RED)
+        )
+
+        self.play(FadeIn(geometry_sib_opt_proof[-1]), FadeOut(geometry_sib_opt_proof[-2]))
+        self.wait()
+        self.next_slide()
+
+        geometry_sib_opt_proof.append( # 4
+            MyTex(r'''\scalebox{0.8}{\parbox{15cm}{
+            An upperbound on $r^*$:
+            \begin{myitemize}
+            \item Pick $\mmv_i \in \Omega_i$, compute $\displaystyle E = \max_{i\in [n]} \|\mmv_1 - \mmv_i\|$, then $r^* \le E \le D$
+            \end{myitemize}
+            }}''', up=geometry_sib_opt_proof[-1], buff=0.25)
+        )
+
+        self.play(FadeIn(geometry_sib_opt_proof[-1]))
+        self.wait()
+        self.next_slide()
+
+        geometry_sib_opt_proof.append( # 5
+            MyTex(r'''\scalebox{0.8}{\parbox{15cm}{
+            An upperbound on $\|\brmf(\xt{\mmx}{t})\|_\infty$:
+            \begin{myitemize}
+            \item Use the doubling trick
+            \item $\rho_1 = \sqrt{2}E$, $\rho_\tau = 2 \rho_{\tau - 1}$
+            \end{myitemize}
+            }}''', up=geometry_sib_opt_proof[-1], buff=0.25)
+        )
+
+        self.play(FadeIn(geometry_sib_opt_proof[-1]))
+        self.wait()
+        self.next_slide()
+
+        self.play(FadeOut(
+                *geometry_sib_opt_proof[:2], 
+                *geometry_sib_opt_proof[3:],
+                geometry_sib_claim,
+                geometry_sib_ftp_thm
+            ),
+            geometry_sib_opt_thm.animate.to_edge(UR, buff=0.5)
+        )
+        self.wait()
+        self.next_slide()
+
+        geometry_sib_examples = [
+            MyTex(r'''\scalebox{0.9}{\parbox{15cm}{
+            Some examples
+            }}''', up=subtitle_geometry).set_color(RED),
+        ]
+
+        self.play(FadeIn(geometry_sib_examples[-1]))
+        self.wait()
+        self.next_slide()
+
+        geometry_sib_examples.append( # 1
+            MyTex(r'''\scalebox{0.8}{\parbox{15cm}{
+            Convex polytopes: $O(S) = O(N)$
+            \begin{myitemize}
+            \item Polytopes distance: $O({R^2 (N + d) \over \eps^2})$
+            \item Smallest enclosing ball: $O({nd \log n \over \eps^2})$
+            \item SIB of line segments: $O({R^2 nd \log n \over \eps^2})$
+            \end{myitemize}
+            }}''', up=geometry_sib_examples[-1], buff=0.25)
+        )
+        geometry_sib_examples[-1][0][:16].set_color(BLUE)
+
+        self.play(FadeIn(geometry_sib_examples[-1]))
+        self.wait()
+        self.next_slide()
+
+        geometry_sib_examples.append( # 2
+            MyTex(r'''\scalebox{0.8}{\parbox{15cm}{
+            Reduced polytopes: $O(S) = O(N)$
+            \begin{myitemize}
+            \item $C$-SVM, $\nu$-SVM: $O({R^2 (N + d) \over \eps^2})$
+            \end{myitemize}
+            }}''', up=geometry_sib_examples[-1], buff=0.25)
+        )
+        geometry_sib_examples[-1][0][:17].set_color(BLUE)
+
+        self.play(FadeIn(geometry_sib_examples[-1]))
+        self.wait()
+        self.next_slide()
+
+        geometry_sib_examples.append( # 3
+            MyTex(r'''\scalebox{0.8}{\parbox{15cm}{
+            Axis-aligned bounding boxes (AABBs): $O(S) = O(nd)$
+            }}''', up=geometry_sib_examples[-1], buff=0.25)
+        )
+        geometry_sib_examples[-1][0][:33].set_color(BLUE)
+
+        self.play(FadeIn(geometry_sib_examples[-1]))
+        self.wait()
+        self.next_slide()
+
+        geometry_sib_examples.append( # 4
+            MyTex(r'''\scalebox{0.8}{\parbox{15cm}{
+            Balls: $O(S) = O(nd)$
+            }}''', up=geometry_sib_examples[-1], buff=0.25)
+        )
+        geometry_sib_examples[-1][0][:6].set_color(BLUE)
+
+        self.play(FadeIn(geometry_sib_examples[-1]))
+        self.wait()
+        self.next_slide()
+
+        geometry_sib_examples.append( # 5
+            MyTex(r'''\scalebox{0.8}{\parbox{15cm}{
+            Ellipsoids: $O(S) = O(nd^2)$, assuming matrix inverses are pre-computed
+            }}''', up=geometry_sib_examples[-1], buff=0.25)
+        )
+        geometry_sib_examples[-1][0][:11].set_color(BLUE)
+
+        self.play(FadeIn(geometry_sib_examples[-1]))
+        self.wait()
+        self.next_slide()
+
+        geometry_sib_takeaway = MyTex(r'''
+            Takeaway: If we can solve linear optimization problems over every $\Omega_i$, then we can also solve the SIB problem approximately. 
+        ''', up=subtitle_geometry, buff=2)
+        geometry_sib_takeaway[0][:9].set_color(RED)
+
+        self.play(FadeOut(*geometry_sib_examples), FadeIn(geometry_sib_takeaway))
+
+        geometry_sib_extension = MyTex(r'''
+            Extension: The input objects can be convex hulls of compact (but not necessarily convex) objects.
+        ''', up=geometry_sib_takeaway, buff=0.5)
+        geometry_sib_extension[0][:10].set_color(RED)
+
+        self.play(FadeIn(geometry_sib_extension))
 
         ## 1. Polytope Distance / Hard-SVM
         # self.play(Create(geoemtry_subtitles[0]))
