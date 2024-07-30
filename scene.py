@@ -250,7 +250,13 @@ class Presentation(Slide):
         subtitle_parallel = Text("Parallel Computing", color=RED)
         subtitle_conclu = Text("Conclusion & Future Directions")
 
-        # # Introduction ################################################################################################
+
+
+
+#######################################################################################################################
+#######################################################################################################################
+#######################################################################################################################
+# # Introduction ######################################################################################################
         # intro_pos = {
         #     'circle_geometry' : UL * 1.2,
         #     'circle_scp' : UR * 1.2,
@@ -428,7 +434,13 @@ class Presentation(Slide):
         # self.wait()
         # self.next_slide()
 
-        # # EJA & Symmetric Cones #######################################################################################
+
+
+
+###########################################################################################################################
+###########################################################################################################################
+###########################################################################################################################
+# # EJA & Symmetric Cones #################################################################################################
 
         # self.play(subtitle_eja.animate.to_edge(UL, buff=0.5),
         #     FadeOut(outline_title, subtitle_game, subtitle_geometry, subtitle_scp, subtitle_parallel, subtitle_conclu)
@@ -682,7 +694,13 @@ class Presentation(Slide):
         
         # self.play(FadeOut(sc_6, sc_7))
 
-        # # Zero-Sum Game ###############################################################################################
+
+
+
+###########################################################################################################################
+###########################################################################################################################
+###########################################################################################################################
+# # Zero-Sum Game #########################################################################################################
 
         # self.play(subtitle_eja.animate.move_to(outline_pos['subtitle_eja']),
         #     FadeIn(outline_title, subtitle_game, subtitle_geometry, subtitle_scp, subtitle_parallel, subtitle_conclu)
@@ -1077,7 +1095,15 @@ class Presentation(Slide):
 
         # self.play(FadeOut(game_thm, game_claim, game_eigenval_claim, game_eigenval_proof[0], game_eigenval_proof[1], game_eigenval_proof[3], game_eigenval_proof[4], game_eigenval_proof[5][2], game_eigenval_proof[-1]))
 
-        # Geometric Optimization ######################################################################################
+
+
+
+
+
+########################################################################################################################
+########################################################################################################################
+########################################################################################################################
+# Geometric Optimization ###############################################################################################
 
         # self.play(subtitle_game.animate.move_to(outline_pos['subtitle_game']),
         #     FadeIn(outline_title, subtitle_eja, subtitle_geometry, subtitle_scp, subtitle_parallel, subtitle_conclu)
@@ -2117,191 +2143,193 @@ class Presentation(Slide):
 
 
 
+#######################################################################################################################
+#######################################################################################################################
+#######################################################################################################################
+# # Symmetric Cone Programming ########################################################################################
 
-        # # Symmetric Cone Programming ##################################################################################
+        # self.play(subtitle_geometry.animate.move_to(outline_pos['subtitle_geometry']),
+        #     FadeIn(outline_title, subtitle_eja, subtitle_game, subtitle_scp, subtitle_parallel, subtitle_conclu)
+        # )
+        # self.next_slide()
+        # self.play(subtitle_scp.animate.to_edge(UL, buff=0.5).set_color(WHITE),
+        #     FadeOut(outline_title, subtitle_eja, subtitle_game, subtitle_geometry, subtitle_parallel, subtitle_conclu)
+        # )
+        # self.next_slide()
 
-        self.play(subtitle_geometry.animate.move_to(outline_pos['subtitle_geometry']),
-            FadeIn(outline_title, subtitle_eja, subtitle_game, subtitle_scp, subtitle_parallel, subtitle_conclu)
-        )
-        self.next_slide()
-        self.play(subtitle_scp.animate.to_edge(UL, buff=0.5).set_color(WHITE),
-            FadeOut(outline_title, subtitle_eja, subtitle_game, subtitle_geometry, subtitle_parallel, subtitle_conclu)
-        )
-        self.next_slide()
+        # scp_problem = [ # 0
+        #     MyTex(r'''
+        #     $\displaystyle
+        #     \begin{aligned}
+        #         \minimize\quad & \mmc^T \mmx \\
+        #         \subto\quad & \mmA \mmx - \mmb \in \cc{K} \\
+        #     \end{aligned}$
+        #     ''')
+        # ]
 
-        scp_problem = [ # 0
-            MyTex(r'''
-            $\displaystyle
-            \begin{aligned}
-                \minimize\quad & \mmc^T \mmx \\
-                \subto\quad & \mmA \mmx - \mmb \in \cc{K} \\
-            \end{aligned}$
-            ''')
-        ]
+        # self.play(FadeIn(scp_problem[-1]))
+        # self.wait()
+        # self.next_slide()
 
-        self.play(FadeIn(scp_problem[-1]))
-        self.wait()
-        self.next_slide()
+        # scp_problem.append( # 1
+        #     MyTex(r'''
+        #     $\displaystyle
+        #     \begin{aligned}
+        #         \minimize\quad & \mmc^T \mmx \\
+        #         \subto\quad & \sum_{j=1}^m \mma_j x_j - \mmb \in \cc{K} \\
+        #     \end{aligned}$
+        #     ''')
+        # )
 
-        scp_problem.append( # 1
-            MyTex(r'''
-            $\displaystyle
-            \begin{aligned}
-                \minimize\quad & \mmc^T \mmx \\
-                \subto\quad & \sum_{j=1}^m \mma_j x_j - \mmb \in \cc{K} \\
-            \end{aligned}$
-            ''')
-        )
+        # self.play(FadeIn(scp_problem[-1]), FadeOut(scp_problem[-2]))
+        # self.wait()
+        # self.next_slide()
 
-        self.play(FadeIn(scp_problem[-1]), FadeOut(scp_problem[-2]))
-        self.wait()
-        self.next_slide()
+        # scp_problem.append( # 2
+        #     Text('Primal').set_font_size(25).set_color(YELLOW)
+        # )
 
-        scp_problem.append( # 2
-            Text('Primal').set_font_size(25).set_color(YELLOW)
-        )
+        # scp_problem[-1].next_to(scp_problem[-2], UP, buff=0.5)
 
-        scp_problem[-1].next_to(scp_problem[-2], UP, buff=0.5)
+        # self.play(FadeIn(scp_problem[-1]))
+        # self.wait()
+        # self.next_slide()
 
-        self.play(FadeIn(scp_problem[-1]))
-        self.wait()
-        self.next_slide()
-
-        scp_problem.append( # 3
-            MyTex(r'''
-            $\displaystyle
-            \begin{aligned}
-                \maximize \quad & \mmb \bullet \mmy \\
-                \subto \quad    & \mma_j \bullet \mmy = c_j,\ \forall j\in [m], \\
-                                & \mmy \in \cc{K}
-            \end{aligned}$
-            ''')
-        )
+        # scp_problem.append( # 3
+        #     MyTex(r'''
+        #     $\displaystyle
+        #     \begin{aligned}
+        #         \maximize \quad & \mmb \bullet \mmy \\
+        #         \subto \quad    & \mma_j \bullet \mmy = c_j,\ \forall j\in [m], \\
+        #                         & \mmy \in \cc{K}
+        #     \end{aligned}$
+        #     ''')
+        # )
         
-        scp_problem.append( # 4
-            Text('Dual').set_font_size(25).set_color(YELLOW)
-        )
+        # scp_problem.append( # 4
+        #     Text('Dual').set_font_size(25).set_color(YELLOW)
+        # )
         
-        self.play(Group(scp_problem[1], scp_problem[2]).animate.shift(LEFT * 3))
+        # self.play(Group(scp_problem[1], scp_problem[2]).animate.shift(LEFT * 3))
 
-        scp_problem[4].next_to(scp_problem[2], RIGHT, buff=5)
-        scp_problem[3].next_to(scp_problem[4], DOWN, buff=0.5)
+        # scp_problem[4].next_to(scp_problem[2], RIGHT, buff=5)
+        # scp_problem[3].next_to(scp_problem[4], DOWN, buff=0.5)
 
-        self.play(FadeIn(scp_problem[3], scp_problem[4]))
-        self.wait()
-        self.next_slide()
+        # self.play(FadeIn(scp_problem[3], scp_problem[4]))
+        # self.wait()
+        # self.next_slide()
 
-        scp_problem_group = Group(scp_problem[3], scp_problem[4], scp_problem[1], scp_problem[2])
+        # scp_problem_group = Group(scp_problem[3], scp_problem[4], scp_problem[1], scp_problem[2])
 
-        self.play(
-            scp_problem_group.animate.shift([0, subtitle_scp.get_bottom()[1] - scp_problem[4].get_top()[1] - 0.5, 0])
-        )
-        self.wait()
-        self.next_slide()
+        # self.play(
+        #     scp_problem_group.animate.shift([0, subtitle_scp.get_bottom()[1] - scp_problem[4].get_top()[1] - 0.5, 0])
+        # )
+        # self.wait()
+        # self.next_slide()
 
-        scp_problem_examples = [ # 0
-            MyTex(r'''
-            Linear program: $\cc{K} = \bR^n_+$
-            ''').set_color(BLUE).next_to(scp_problem_group, DOWN, buff=0.5)
-        ]
+        # scp_problem_examples = [ # 0
+        #     MyTex(r'''
+        #     Linear program: $\cc{K} = \bR^n_+$
+        #     ''').set_color(BLUE).next_to(scp_problem_group, DOWN, buff=0.5)
+        # ]
 
-        scp_problem_examples.append( # 1
-            MyTex(r'''
-            $\displaystyle
-            \begin{aligned}
-                \min \quad       & \mmc^T \mmx \\
-                {\rm s.t.} \quad & \mmA\mmx \ge \mmb \\
-            \end{aligned}
-            \hspace{3em}
-            \begin{aligned}
-                \max \quad       & \mmb^T \mmx \\
-                {\rm s.t.} \quad & \mmA^T \mmy = \mmc, \\
-                                & \mmy \ge 0
-            \end{aligned}
-            $
-            ''').next_to(scp_problem_examples[-1], DOWN, buff=0.25)
-        )
+        # scp_problem_examples.append( # 1
+        #     MyTex(r'''
+        #     $\displaystyle
+        #     \begin{aligned}
+        #         \min \quad       & \mmc^T \mmx \\
+        #         {\rm s.t.} \quad & \mmA\mmx \ge \mmb \\
+        #     \end{aligned}
+        #     \hspace{3em}
+        #     \begin{aligned}
+        #         \max \quad       & \mmb^T \mmx \\
+        #         {\rm s.t.} \quad & \mmA^T \mmy = \mmc, \\
+        #                         & \mmy \ge 0
+        #     \end{aligned}
+        #     $
+        #     ''').next_to(scp_problem_examples[-1], DOWN, buff=0.25)
+        # )
 
-        self.play(FadeIn(*scp_problem_examples[-2:]))
-        self.wait()
-        self.next_slide()
+        # self.play(FadeIn(*scp_problem_examples[-2:]))
+        # self.wait()
+        # self.next_slide()
 
-        scp_problem_examples.append( # 2
-            MyTex(r'''
-            Semidefinite program: $\cc{K} = \cc{S}^n_+$
-            ''').set_color(BLUE).next_to(scp_problem_group, DOWN, buff=0.5)
-        )
+        # scp_problem_examples.append( # 2
+        #     MyTex(r'''
+        #     Semidefinite program: $\cc{K} = \cc{S}^n_+$
+        #     ''').set_color(BLUE).next_to(scp_problem_group, DOWN, buff=0.5)
+        # )
 
-        scp_problem_examples.append( # 3
-            MyTex(r'''
-            $\displaystyle
-            \begin{aligned}
-                \min \quad       & \mmc^T \mmx \\
-                {\rm s.t.} \quad & \sum_{j=1}^m \mmA_j x_j - \mmB \in \cc{S}^n_+ \\
-            \end{aligned}
-            \hspace{3em}
-            \begin{aligned}
-                \max \quad       & \Tr(\mmB \mmY)            \\
-                {\rm s.t.} \quad & \Tr(\mmA_j \mmY) = c_j, \ \forall j \in [m], \\
-                                & \mmY \in \cc{S}^n_+
-            \end{aligned}
-            $
-            ''').next_to(scp_problem_examples[-1], DOWN, buff=0.25)
-        )
+        # scp_problem_examples.append( # 3
+        #     MyTex(r'''
+        #     $\displaystyle
+        #     \begin{aligned}
+        #         \min \quad       & \mmc^T \mmx \\
+        #         {\rm s.t.} \quad & \sum_{j=1}^m \mmA_j x_j - \mmB \in \cc{S}^n_+ \\
+        #     \end{aligned}
+        #     \hspace{3em}
+        #     \begin{aligned}
+        #         \max \quad       & \Tr(\mmB \mmY)            \\
+        #         {\rm s.t.} \quad & \Tr(\mmA_j \mmY) = c_j, \ \forall j \in [m], \\
+        #                         & \mmY \in \cc{S}^n_+
+        #     \end{aligned}
+        #     $
+        #     ''').next_to(scp_problem_examples[-1], DOWN, buff=0.25)
+        # )
 
-        self.play(FadeIn(*scp_problem_examples[-2:]), FadeOut(*scp_problem_examples[-4:-2]))
-        self.wait()
-        self.next_slide()
+        # self.play(FadeIn(*scp_problem_examples[-2:]), FadeOut(*scp_problem_examples[-4:-2]))
+        # self.wait()
+        # self.next_slide()
 
-        scp_problem_examples.append( # 4
-            MyTex(r'''
-            Second-order cone program: $\cc{K} = \cproduct_{i=1}^n \cc{Q}^{d_i + 1}$
-            ''').set_color(BLUE).next_to(scp_problem_group, DOWN, buff=0.5)
-        )
+        # scp_problem_examples.append( # 4
+        #     MyTex(r'''
+        #     Second-order cone program: $\cc{K} = \cproduct_{i=1}^n \cc{Q}^{d_i + 1}$
+        #     ''').set_color(BLUE).next_to(scp_problem_group, DOWN, buff=0.5)
+        # )
 
-        scp_problem_examples.append( # 5
-            MyTex(r'''
-            $\displaystyle
-            \begin{aligned}
-                \max \quad       & \mmc^T \mmx                                                    \\
-                {\rm s.t.} \quad & \mmA_i \mmx - \mmb_i \in \cc{Q}^{d_i + 1},\ \forall i \in [n] \\
-            \end{aligned}
-            \hspace{2em}
-            \begin{aligned}
-                \min \quad       & \mmb_1^T \mmy_1 + \dots + \mmb_n^T \mmy_n           \\
-                {\rm s.t.} \quad & \mmA_1^T \mmy_1 + \dots + \mmA_n^T \mmy_n = \mmc, \\
-                                & \mmy_i \in \cc{Q}^{d_i + 1}, \ \forall i \in [n]
-            \end{aligned}
-            $
-            ''').next_to(scp_problem_examples[-1], DOWN, buff=0.25)
-        )
+        # scp_problem_examples.append( # 5
+        #     MyTex(r'''
+        #     $\displaystyle
+        #     \begin{aligned}
+        #         \max \quad       & \mmc^T \mmx                                                    \\
+        #         {\rm s.t.} \quad & \mmA_i \mmx - \mmb_i \in \cc{Q}^{d_i + 1},\ \forall i \in [n] \\
+        #     \end{aligned}
+        #     \hspace{2em}
+        #     \begin{aligned}
+        #         \min \quad       & \mmb_1^T \mmy_1 + \dots + \mmb_n^T \mmy_n           \\
+        #         {\rm s.t.} \quad & \mmA_1^T \mmy_1 + \dots + \mmA_n^T \mmy_n = \mmc, \\
+        #                         & \mmy_i \in \cc{Q}^{d_i + 1}, \ \forall i \in [n]
+        #     \end{aligned}
+        #     $
+        #     ''').next_to(scp_problem_examples[-1], DOWN, buff=0.25)
+        # )
 
-        self.play(FadeIn(*scp_problem_examples[-2:]), FadeOut(*scp_problem_examples[-4:-2]))
-        self.wait()
-        self.next_slide()
+        # self.play(FadeIn(*scp_problem_examples[-2:]), FadeOut(*scp_problem_examples[-4:-2]))
+        # self.wait()
+        # self.next_slide()
 
-        scp_two_algorithms = [
-            Text('Two algorithms:').set_font_size(25).set_color(RED).next_to(scp_problem_group, DOWN, buff=0.5).to_edge(LEFT, buff=1)
-        ]
+        # scp_two_algorithms = [
+        #     Text('Two algorithms:').set_font_size(25).set_color(RED).next_to(scp_problem_group, DOWN, buff=0.5).to_edge(LEFT, buff=1)
+        # ]
 
-        scp_two_algorithms.append(
-            MyTex(r'''\scalebox{0.9}{\parbox{15cm}{
-            \begin{myitemize}
-            \item Primal-only: find a primal-feasible $\mmx$ with $\mmc^T \mmx \le \alpha^* + \eps$
-            \item Primal-dual: find a pair of solutions $\{\mmx, \mmy\}$ such that $\mmc^T \mmx \le \alpha^* + \eps$ and $\mmb \bullet \mmy \ge \alpha^* - \eps$
-            \end{myitemize}
-            }}''', up=scp_two_algorithms[-1]).to_edge(LEFT, buff=1)
-        )
+        # scp_two_algorithms.append(
+        #     MyTex(r'''\scalebox{0.9}{\parbox{15cm}{
+        #     \begin{myitemize}
+        #     \item Primal-only: find a primal-feasible $\mmx$ with $\mmc^T \mmx \le \alpha^* + \eps$
+        #     \item Primal-dual: find a pair of solutions $\{\mmx, \mmy\}$ such that $\mmc^T \mmx \le \alpha^* + \eps$ and $\mmb \bullet \mmy \ge \alpha^* - \eps$
+        #     \end{myitemize}
+        #     }}''', up=scp_two_algorithms[-1]).to_edge(LEFT, buff=1)
+        # )
         
-        self.play(FadeIn(*scp_two_algorithms), FadeOut(*scp_problem_examples[-2:]))
-        self.wait()
-        self.next_slide()
+        # self.play(FadeIn(*scp_two_algorithms), FadeOut(*scp_problem_examples[-2:]))
+        # self.wait()
+        # self.next_slide()
 
-        scp_subtitles = [
-            Text(': Primal-only').set_font_size(25).next_to(subtitle_scp, RIGHT, buff=0.1),
-            Text(': Primal-dual').set_font_size(25).next_to(subtitle_scp, RIGHT, buff=0.1),
-            Text(': Geometric interpretation').set_font_size(25).next_to(subtitle_scp, RIGHT, buff=0.1)
-        ]
+        # scp_subtitles = [
+        #     Text(': Primal-only').set_font_size(25).next_to(subtitle_scp, RIGHT, buff=0.1),
+        #     Text(': Primal-dual').set_font_size(25).next_to(subtitle_scp, RIGHT, buff=0.1),
+        #     Text(': Geometric interpretation').set_font_size(25).next_to(subtitle_scp, RIGHT, buff=0.1)
+        # ]
 
         # ## Primal-only ######################################################################################################
 
@@ -2628,258 +2656,364 @@ class Presentation(Slide):
         # self.wait()
         # self.next_slide()
 
-        ## Primal-dual ######################################################################################################
+        # ## Primal-dual ######################################################################################################
 
-        self.remove(*scp_problem[1:5], *scp_two_algorithms) # remove this later
+        # self.remove(*scp_problem[1:5], *scp_two_algorithms) # remove this later
 
-        self.play(Create(scp_subtitles[1].shift([0, 0.03, 0])))
-        self.wait()
-        self.next_slide()
+        # self.play(Create(scp_subtitles[1].shift([0, 0.03, 0])))
+        # self.wait()
+        # self.next_slide()
 
-        self.play(FadeIn(*scp_problem[1:5]))
-        self.wait()
-        self.next_slide()
+        # self.play(FadeIn(*scp_problem[1:5]))
+        # self.wait()
+        # self.next_slide()
 
-        scp_problem.append( # 5
-            MyTex(r'''
-            $\displaystyle
-            \begin{aligned}
-                \minimize\quad & \mmc^T \mmx \\
-                \subto\quad 
-                & \sum_{j=1}^m \mma_j x_j - \mmb \in \cc{K} \\
-                & \sum_{j=1}^m \mma_j' x_j - \mmb' \in \cc{K}' \\
-            \end{aligned}$
-            ''').next_to(scp_problem[2], DOWN, buff=0.5)
-        )
+        # scp_problem.append( # 5
+        #     MyTex(r'''
+        #     $\displaystyle
+        #     \begin{aligned}
+        #         \minimize\quad & \mmc^T \mmx \\
+        #         \subto\quad 
+        #         & \sum_{j=1}^m \mma_j x_j - \mmb \in \cc{K} \\
+        #         & \sum_{j=1}^m \mma_j' x_j - \mmb' \in \cc{K}' \\
+        #     \end{aligned}$
+        #     ''').next_to(scp_problem[2], DOWN, buff=0.5)
+        # )
 
-        scp_problem.append( # 6
-            MyTex(r'''
-            $\displaystyle
-            \begin{aligned}
-                \maximize \quad & \mmb \bullet \mmy + \mmb' \bdiamond \mmy' \\
-                \subto \quad    & \mma_j \bullet \mmy + \mma_j' \bdiamond \mmy' = c_j,\ \forall j\in [m], \\
-                                & \mmy \in \cc{K},\ \mmy' \in \cc{K}'
-            \end{aligned}$
-            ''').next_to(scp_problem[4], DOWN, buff=0.5).shift([0.25, 0, 0])
-        )
+        # scp_problem.append( # 6
+        #     MyTex(r'''
+        #     $\displaystyle
+        #     \begin{aligned}
+        #         \maximize \quad & \mmb \bullet \mmy + \mmb' \bdiamond \mmy' \\
+        #         \subto \quad    & \mma_j \bullet \mmy + \mma_j' \bdiamond \mmy' = c_j,\ \forall j\in [m], \\
+        #                         & \mmy \in \cc{K},\ \mmy' \in \cc{K}'
+        #     \end{aligned}$
+        #     ''').next_to(scp_problem[4], DOWN, buff=0.5).shift([0.25, 0, 0])
+        # )
 
-        self.play(
-            FadeOut(scp_problem[1], scp_problem[3]),
-            FadeIn(scp_problem[-1], scp_problem[-2])    
-        )
-        self.wait()
-        self.next_slide()
+        # self.play(
+        #     FadeOut(scp_problem[1], scp_problem[3]),
+        #     FadeIn(scp_problem[-1], scp_problem[-2])    
+        # )
+        # self.wait()
+        # self.next_slide()
 
-        scp_primal_dual_problem_group = Group(
-            scp_problem[-1], scp_problem[-2], scp_problem[2], scp_problem[4]
-        )
+        # scp_primal_dual_problem_group = Group(
+        #     scp_problem[-1], scp_problem[-2], scp_problem[2], scp_problem[4]
+        # )
 
-        self.play(scp_primal_dual_problem_group.animate.scale(0.7, about_point=scp_primal_dual_problem_group.get_top()))
+        # self.play(scp_primal_dual_problem_group.animate.scale(0.7, about_point=scp_primal_dual_problem_group.get_top()))
 
-        scp_primal_dual_example = MyTex(r'''
-        A simple example:
-        \begin{myitemize}
-        \item Let $\mma_j' = \mme_j,\ \mmb' = 0\ \text{and}\ \cc{K}' = \bR^m_+$:
-        \item[] $\displaystyle
-        \hspace{3em}
-        \begin{aligned}
-            \min \quad & \mmc^T \mmx \\
-            {\rm s.t.} \quad & \sum_{j=1}^m \mma_j x_j - \mmb \in \cc{K}, \\
-             & \mmx \ge 0
-        \end{aligned}
-        \hspace{2em}
-        \begin{aligned}
-            \max \quad & \mmb \bullet \mmy \\
-            {\rm s.t.} \quad & \mma_j \bullet \mmy \le c_j,\ \forall j\in [m], \\
-             & \mmy \in \cc{K}
-        \end{aligned}$
-        \end{myitemize}
-        ''').scale(0.9).next_to(scp_primal_dual_problem_group, DOWN, buff=0.5).shift([-0.3, 0, 0])
-        scp_primal_dual_example[0][:15].set_color(BLUE)
+        # scp_primal_dual_example = MyTex(r'''
+        # A simple example:
+        # \begin{myitemize}
+        # \item Let $\mma_j' = \mme_j,\ \mmb' = 0\ \text{and}\ \cc{K}' = \bR^m_+$:
+        # \item[] $\displaystyle
+        # \hspace{3em}
+        # \begin{aligned}
+        #     \min \quad & \mmc^T \mmx \\
+        #     {\rm s.t.} \quad & \sum_{j=1}^m \mma_j x_j - \mmb \in \cc{K}, \\
+        #      & \mmx \ge 0
+        # \end{aligned}
+        # \hspace{2em}
+        # \begin{aligned}
+        #     \max \quad & \mmb \bullet \mmy \\
+        #     {\rm s.t.} \quad & \mma_j \bullet \mmy \le c_j,\ \forall j\in [m], \\
+        #      & \mmy \in \cc{K}
+        # \end{aligned}$
+        # \end{myitemize}
+        # ''').scale(0.9).next_to(scp_primal_dual_problem_group, DOWN, buff=0.5).shift([-0.3, 0, 0])
+        # scp_primal_dual_example[0][:15].set_color(BLUE)
 
-        self.play(FadeIn(scp_primal_dual_example))
-        self.wait()
-        self.next_slide()
+        # self.play(FadeIn(scp_primal_dual_example))
+        # self.wait()
+        # self.next_slide()
 
-        scp_primal_dual_claim = Theorem(r'''
-            {\bf\underline{Claim:}}
-            If the index set $\cc{J} \triangleq \Big\{ j \in [m] : \lambda_{\min}(\mma_j) > 0,\ \lambda_{\min}(\mma_j') \ge 0 \Big\} \ne \varnothing$, let $R = \min_{j\in \cc{J}} {c_j \over  \lambda_{\min}(\mma_j)}$, there is an algorithm that solve the primal FTP in $O({R^2 \rho^2 \log r \over \eps^2})$ iterations.
-        ''', edge_color=BLUE).next_to(scp_primal_dual_problem_group, DOWN, buff=0.5)
-        scp_primal_dual_claim.shift([-scp_primal_dual_claim.get_center()[0], 0, 0])
+        # scp_primal_dual_claim = Theorem(r'''
+        #     {\bf\underline{Claim:}}
+        #     If the index set $\cc{J} \triangleq \Big\{ j \in [m] : \lambda_{\min}(\mma_j) > 0,\ \lambda_{\min}(\mma_j') \ge 0 \Big\} \ne \varnothing$, let $R = \min_{j\in \cc{J}} {c_j \over  \lambda_{\min}(\mma_j)}$, there is an algorithm that solve the primal FTP in $O({R^2 \rho^2 \log r \over \eps^2})$ iterations.
+        # ''', edge_color=BLUE).next_to(scp_primal_dual_problem_group, DOWN, buff=0.5)
+        # scp_primal_dual_claim.shift([-scp_primal_dual_claim.get_center()[0], 0, 0])
 
-        self.play(FadeIn(scp_primal_dual_claim), FadeOut(scp_primal_dual_example))
-        self.wait()
-        self.next_slide()
+        # self.play(FadeIn(scp_primal_dual_claim), FadeOut(scp_primal_dual_example))
+        # self.wait()
+        # self.next_slide()
 
-        scp_primal_dual_claim_proof = MyTex(r'''
-            Just let $\cc{C} = \Big\{\mmx : \sum_{j=1}^m \mma_j' x_j - \mmb' \in \cc{K}' \Big\}$
-        ''').set_color(BLUE).next_to(scp_primal_dual_claim, DOWN, buff=0.25)
+        # scp_primal_dual_claim_proof = MyTex(r'''
+        #     Just let $\cc{C} = \Big\{\mmx : \sum_{j=1}^m \mma_j' x_j - \mmb' \in \cc{K}' \Big\}$
+        # ''').set_color(BLUE).next_to(scp_primal_dual_claim, DOWN, buff=0.25)
 
-        self.play(FadeIn(scp_primal_dual_claim_proof))
-        self.wait()
-        self.next_slide()
+        # self.play(FadeIn(scp_primal_dual_claim_proof))
+        # self.wait()
+        # self.next_slide()
 
-        self.play(
-            FadeOut(scp_primal_dual_claim_proof),
-            scp_primal_dual_claim.animate.scale(0.45).to_edge(UR, buff=0.5).shift([0.2, 0, 0])
-        )
-        self.play(
-            scp_primal_dual_problem_group.animate.scale(0.65).next_to(scp_primal_dual_claim, DOWN, buff=0.2).to_edge(RIGHT, buff=0.4)
-        )
-        self.wait()
-        self.next_slide()
+        # self.play(
+        #     FadeOut(scp_primal_dual_claim_proof),
+        #     scp_primal_dual_claim.animate.scale(0.45).to_edge(UR, buff=0.5).shift([0.2, 0, 0])
+        # )
+        # self.play(
+        #     scp_primal_dual_problem_group.animate.scale(0.65).next_to(scp_primal_dual_claim, DOWN, buff=0.2).to_edge(RIGHT, buff=0.4)
+        # )
+        # self.wait()
+        # self.next_slide()
 
-        scp_primal_dual_proof = [ # 0
-            MyTex(r'''\scalebox{0.8}{\parbox{15cm}{
-                Let $\displaystyle \brmf(\mmx) = \sum_{j=1}^m \mma_j x_j - \mmb$\\
-                $\displaystyle \cc{A} = \Big\{ \mmx : \sum_{j=1}^m \mma_j' x_j - \mmb' \in \cc{K}', \ \mmc^T \mmx \le \hat{\alpha} \Big\}$
-            }}''', up=subtitle_scp)
-        ]
+        # scp_primal_dual_proof = [ # 0
+        #     MyTex(r'''\scalebox{0.8}{\parbox{15cm}{
+        #         Let $\displaystyle \brmf(\mmx) = \sum_{j=1}^m \mma_j x_j - \mmb$\\
+        #         $\displaystyle \cc{A} = \Big\{ \mmx : \sum_{j=1}^m \mma_j' x_j - \mmb' \in \cc{K}', \ \mmc^T \mmx \le \hat{\alpha} \Big\}$
+        #     }}''', up=subtitle_scp)
+        # ]
 
-        self.play(FadeIn(scp_primal_dual_proof[-1]))
-        self.wait()
-        self.next_slide()
+        # self.play(FadeIn(scp_primal_dual_proof[-1]))
+        # self.wait()
+        # self.next_slide()
 
-        scp_primal_dual_claim2 = Theorem(r'''
-            {\bf\underline{Claim:}}
-            If there exists $\xt{\mmy}{t}\in \cc{K}$ such that $\displaystyle \max_{\mmx\in \cc{A}}\ \brmf(\mmx) \bullet \xt{\mmy}{t} < 0$, we can construct a dual solution with objective $> \hat{\alpha}$.
-        ''').shift([0,-1,0])
+        # scp_primal_dual_claim2 = Theorem(r'''
+        #     {\bf\underline{Claim:}}
+        #     If there exists $\xt{\mmy}{t}\in \cc{K}$ such that $\displaystyle \max_{\mmx\in \cc{A}}\ \brmf(\mmx) \bullet \xt{\mmy}{t} < 0$, we can construct a dual solution with objective $> \hat{\alpha}$.
+        # ''').shift([0,-1,0])
 
-        self.play(FadeIn(scp_primal_dual_claim2))
-        self.wait()
-        self.next_slide()
+        # self.play(FadeIn(scp_primal_dual_claim2))
+        # self.wait()
+        # self.next_slide()
 
-        self.play(scp_primal_dual_claim2.animate.scale(0.45).next_to(scp_primal_dual_claim, DOWN, buff=0.1))
-        self.play(
-            scp_primal_dual_problem_group.animate.next_to(scp_primal_dual_claim2, DOWN, buff=0.2).to_edge(RIGHT, buff=0.4)
-        )
+        # self.play(scp_primal_dual_claim2.animate.scale(0.45).next_to(scp_primal_dual_claim, DOWN, buff=0.1))
+        # self.play(
+        #     scp_primal_dual_problem_group.animate.next_to(scp_primal_dual_claim2, DOWN, buff=0.2).to_edge(RIGHT, buff=0.4)
+        # )
 
-        self.wait()
-        self.next_slide()
+        # self.wait()
+        # self.next_slide()
 
-        scp_primal_dual_proof.append( # 1
-            MyTex(r'''\scalebox{0.8}{\parbox{15cm}{
-                Construction of dual solution
-            }}''', up=scp_primal_dual_proof[-1], buff=0.25).set_color(RED)
-        )
+        # scp_primal_dual_proof.append( # 1
+        #     MyTex(r'''\scalebox{0.8}{\parbox{15cm}{
+        #         Construction of dual solution
+        #     }}''', up=scp_primal_dual_proof[-1], buff=0.25).set_color(RED)
+        # )
 
-        self.play(FadeIn(scp_primal_dual_proof[-1]))
-        self.wait()
-        self.next_slide()
+        # self.play(FadeIn(scp_primal_dual_proof[-1]))
+        # self.wait()
+        # self.next_slide()
 
-        scp_primal_dual_proof.append( # 2
-            MyTex(r'''\scalebox{0.8}{\parbox{15cm}{
-            The value of the following problem is less than 0:
-            \begin{myitemize}
-            \item[] $\displaystyle
-            \begin{aligned}
-                \max_{\mmx} \quad & \sum_{j=1}^m (\mma_j \bullet \xt{\mmy}{t})\cdot x_j - \mmb \bullet \xt{\mmy}{t} \\
-                {\rm s.t.} \quad 
-                & \mmc^T \mmx \le \hat{\alpha}, \\
-                & \sum_{j=1}^m \mma_j' x_j - \mmb' \in \cc{K}'
-            \end{aligned}
-            $
-            \end{myitemize}
-            }}''', up=scp_primal_dual_proof[-1], buff=0.25)
-        )
+        # scp_primal_dual_proof.append( # 2
+        #     MyTex(r'''\scalebox{0.8}{\parbox{15cm}{
+        #     The value of the following problem is less than 0:
+        #     \begin{myitemize}
+        #     \item[] $\displaystyle
+        #     \begin{aligned}
+        #         \max_{\mmx} \quad & \sum_{j=1}^m (\mma_j \bullet \xt{\mmy}{t})\cdot x_j - \mmb \bullet \xt{\mmy}{t} \\
+        #         {\rm s.t.} \quad 
+        #         & \mmc^T \mmx \le \hat{\alpha}, \\
+        #         & \sum_{j=1}^m \mma_j' x_j - \mmb' \in \cc{K}'
+        #     \end{aligned}
+        #     $
+        #     \end{myitemize}
+        #     }}''', up=scp_primal_dual_proof[-1], buff=0.25)
+        # )
 
-        self.play(FadeIn(scp_primal_dual_proof[-1]))
-        self.wait()
-        self.next_slide()
+        # self.play(FadeIn(scp_primal_dual_proof[-1]))
+        # self.wait()
+        # self.next_slide()
 
-        scp_primal_dual_proof.append( # 3
-            MyTex(r'''\scalebox{0.8}{\parbox{15cm}{
-            The value of the following problem is greater than $\hat{\alpha}$:
-            \begin{myitemize}
-            \item[] $\displaystyle
-            \begin{aligned}
-                \min_{\mmx} \quad 
-                & \mmc^T \mmx \\
-                {\rm s.t.} \quad 
-                & \sum_{j=1}^m (\mma_j \bullet \xt{\mmy}{t})\cdot x_j - \mmb \bullet \xt{\mmy}{t} \ge 0, \\
-                & \sum_{j=1}^m \mma_j' x_j - \mmb' \in \cc{K}'
-            \end{aligned}
-            $
-            \end{myitemize}
-            }}''', up=scp_primal_dual_proof[-2], buff=0.25)
-        )
+        # scp_primal_dual_proof.append( # 3
+        #     MyTex(r'''\scalebox{0.8}{\parbox{15cm}{
+        #     The value of the following problem is greater than $\hat{\alpha}$:
+        #     \begin{myitemize}
+        #     \item[] $\displaystyle
+        #     \begin{aligned}
+        #         \min_{\mmx} \quad 
+        #         & \mmc^T \mmx \\
+        #         {\rm s.t.} \quad 
+        #         & \sum_{j=1}^m (\mma_j \bullet \xt{\mmy}{t})\cdot x_j - \mmb \bullet \xt{\mmy}{t} \ge 0, \\
+        #         & \sum_{j=1}^m \mma_j' x_j - \mmb' \in \cc{K}'
+        #     \end{aligned}
+        #     $
+        #     \end{myitemize}
+        #     }}''', up=scp_primal_dual_proof[-2], buff=0.25)
+        # )
 
-        self.play(FadeIn(scp_primal_dual_proof[-1]), FadeOut(scp_primal_dual_proof[-2]))
-        self.wait()
-        self.next_slide()
+        # self.play(FadeIn(scp_primal_dual_proof[-1]), FadeOut(scp_primal_dual_proof[-2]))
+        # self.wait()
+        # self.next_slide()
 
-        scp_primal_dual_proof.append( # 4
-            MyTex(r'''\scalebox{0.8}{\parbox{15cm}{
-            The value of the following problem is greater than $\hat{\alpha}$:
-            \begin{myitemize}
-            \item[] $\displaystyle
-            \begin{aligned}
-                \min_{\mmx} \quad 
-                & \mmc^T \mmx \\
-                {\rm s.t.} \quad 
-                & \sum_{j=1}^m (\mma_j \bullet \xt{\mmy}{t})\cdot x_j - \mmb \bullet \xt{\mmy}{t} \ge 0, \\
-                & \sum_{j=1}^m \mma_j' x_j - \mmb' \in \cc{K}'
-            \end{aligned}
-            \hspace{2.5em}
-            \begin{aligned}
-                \max_{z,\ \mmy'} \quad & (\mmb \bullet \xt{\mmy}{t}) \cdot z + \mmb' \bdiamond \mmy' \\
-                {\rm s.t.} \quad & (\mma_j \bullet \xt{\mmy}{t})\cdot z + \mma_j' \bdiamond \mmy' = c_j, \ \forall j \in [m], \\
-                & z \ge 0, \ \mmy' \in \cc{K}'.
-            \end{aligned}
-            $
-            \end{myitemize}
-            }}''', up=scp_primal_dual_proof[-3], buff=0.25)
-        )
+        # scp_primal_dual_proof.append( # 4
+        #     MyTex(r'''\scalebox{0.8}{\parbox{15cm}{
+        #     The value of the following problem is greater than $\hat{\alpha}$:
+        #     \begin{myitemize}
+        #     \item[] $\displaystyle
+        #     \begin{aligned}
+        #         \min_{\mmx} \quad 
+        #         & \mmc^T \mmx \\
+        #         {\rm s.t.} \quad 
+        #         & \sum_{j=1}^m (\mma_j \bullet \xt{\mmy}{t})\cdot x_j - \mmb \bullet \xt{\mmy}{t} \ge 0, \\
+        #         & \sum_{j=1}^m \mma_j' x_j - \mmb' \in \cc{K}'
+        #     \end{aligned}
+        #     \hspace{2.5em}
+        #     \begin{aligned}
+        #         \max_{z,\ \mmy'} \quad & (\mmb \bullet \xt{\mmy}{t}) \cdot z + \mmb' \bdiamond \mmy' \\
+        #         {\rm s.t.} \quad & (\mma_j \bullet \xt{\mmy}{t})\cdot z + \mma_j' \bdiamond \mmy' = c_j, \ \forall j \in [m], \\
+        #         & z \ge 0, \ \mmy' \in \cc{K}'.
+        #     \end{aligned}
+        #     $
+        #     \end{myitemize}
+        #     }}''', up=scp_primal_dual_proof[-3], buff=0.25)
+        # )
 
-        self.play(FadeIn(scp_primal_dual_proof[-1]), FadeOut(scp_primal_dual_proof[-2]))
-        self.wait()
-        self.next_slide()
+        # self.play(FadeIn(scp_primal_dual_proof[-1]), FadeOut(scp_primal_dual_proof[-2]))
+        # self.wait()
+        # self.next_slide()
 
-        scp_primal_dual_proof.append( # 5
-            MyTex(r'''\scalebox{0.8}{\parbox{15cm}{
-            The value of the following problem is greater than $\hat{\alpha}$:
-            \begin{myitemize}
-            \item[] $\displaystyle
-            \begin{aligned}
-                \max_{z,\ \mmy'} \quad & (\mmb \bullet \xt{\mmy}{t}) \cdot z + \mmb' \bdiamond \mmy' \\
-                {\rm s.t.} \quad & (\mma_j \bullet \xt{\mmy}{t})\cdot z + \mma_j' \bdiamond \mmy' = c_j, \ \forall j \in [m], \\
-                & z \ge 0, \ \mmy' \in \cc{K}'.
-            \end{aligned}
-            $
-            \end{myitemize}
-            }}''', up=scp_primal_dual_proof[-4], buff=0.25)
-        )
+        # scp_primal_dual_proof.append( # 5
+        #     MyTex(r'''\scalebox{0.8}{\parbox{15cm}{
+        #     The value of the following problem is greater than $\hat{\alpha}$:
+        #     \begin{myitemize}
+        #     \item[] $\displaystyle
+        #     \begin{aligned}
+        #         \max_{z,\ \mmy'} \quad & (\mmb \bullet \xt{\mmy}{t}) \cdot z + \mmb' \bdiamond \mmy' \\
+        #         {\rm s.t.} \quad & (\mma_j \bullet \xt{\mmy}{t})\cdot z + \mma_j' \bdiamond \mmy' = c_j, \ \forall j \in [m], \\
+        #         & z \ge 0, \ \mmy' \in \cc{K}'.
+        #     \end{aligned}
+        #     $
+        #     \end{myitemize}
+        #     }}''', up=scp_primal_dual_proof[-4], buff=0.25)
+        # )
 
-        self.play(FadeIn(scp_primal_dual_proof[-1]), FadeOut(scp_primal_dual_proof[-2]))
-        self.wait()
-        self.next_slide()
+        # self.play(FadeIn(scp_primal_dual_proof[-1]), FadeOut(scp_primal_dual_proof[-2]))
+        # self.wait()
+        # self.next_slide()
 
-        scp_primal_dual_proof.append( # 6
-            MyTex(r'''\scalebox{0.8}{\parbox{15cm}{
-            Let $(\hat{z}, \hat{\mmy}')$ be the solution to the above:
-            \begin{myitemize}
-            \item $(\hat{z}\xt{\mmy}{t}, \hat{\mmy}')$ is a dual SCP solution with objective $> \hat{\alpha}$
-            \end{myitemize}
-            }}''', up=scp_primal_dual_proof[-1], buff=0.5)
-        )
+        # scp_primal_dual_proof.append( # 6
+        #     MyTex(r'''\scalebox{0.8}{\parbox{15cm}{
+        #     Let $(\hat{z}, \hat{\mmy}')$ be the solution to the above:
+        #     \begin{myitemize}
+        #     \item $(\hat{z}\xt{\mmy}{t}, \hat{\mmy}')$ is a dual SCP solution with objective $> \hat{\alpha}$
+        #     \end{myitemize}
+        #     }}''', up=scp_primal_dual_proof[-1], buff=0.5)
+        # )
 
-        self.play(FadeIn(scp_primal_dual_proof[-1]))
-        self.wait()
-        self.next_slide()
+        # self.play(FadeIn(scp_primal_dual_proof[-1]))
+        # self.wait()
+        # self.next_slide()
 
-        self.play(FadeOut(
-            scp_primal_dual_proof[6],
-            scp_primal_dual_proof[5],
-            *scp_primal_dual_proof[:2],
-            scp_primal_dual_claim,
-            scp_primal_dual_claim2,
-            scp_primal_dual_problem_group,
-            scp_subtitles[1]
-        ))
-        self.wait()
-        self.next_slide()
+        # self.play(FadeOut(
+        #     scp_primal_dual_proof[6],
+        #     scp_primal_dual_proof[5],
+        #     *scp_primal_dual_proof[:2],
+        #     scp_primal_dual_claim,
+        #     scp_primal_dual_claim2,
+        #     scp_primal_dual_problem_group,
+        #     scp_subtitles[1]
+        # ))
+        # self.wait()
+        # self.next_slide()
 
-        # # Parallel Computing ##########################################################################################
+        # scp_applications = [
+        #     MyTex(r'''\scalebox{0.9}{\parbox{15cm}{
+        #     Polytope distance (hard-margin SVM)
+        #     \begin{itemize}
+        #     \item[] $\displaystyle
+        #     \begin{aligned}
+        #         \minimize_{\mmgamma,\ \mmmu}\quad & \|\mmP\mmgamma - \mmQ\mmmu\|\\
+        #         \subto\quad & \mmone^T \mmgamma = 1, \ \mmgamma \ge 0, \\
+        #         & \mmone^T \mmmu = 1, \ \mmmu \ge 0
+        #     \end{aligned}
+        #     \hspace{3em}
+        #     \begin{aligned}
+        #     \maximize_{\mmw, s_1, s_2}\quad & s_1 + s_2  \\
+        #     \subto\quad & \mmP^T \mmw - s_1 \mmone \ge 0,  \\
+        #                 & -\mmQ^T \mmw - s_2 \mmone \ge 0, \\
+        #                 & \|\mmw\| \le 1
+        #     \end{aligned}
+        #     $
+        #     \end{itemize}
+        #     }}''', up=subtitle_scp)
+        # ]
+
+        # scp_applications[-1][0][:32].set_color(BLUE)
+
+        # self.play(FadeIn(scp_applications[-1]))
+        # self.wait()
+        # self.next_slide()
+
+        # scp_applications.append(
+        #     MyTex(r'''\scalebox{0.9}{\parbox{15cm}{
+        #     Polytope distance (hard-margin SVM)
+        #     \begin{itemize}
+        #     \item[] $\displaystyle
+        #     \begin{aligned}
+        #         \minimize_{\mmgamma, \mmmu, \mm{\delta}, \delta_0} \quad & \delta_0 \\
+        #         \subto \quad & -\mmP\mmgamma + \mmQ\mmmu - \mm{\delta} = \mmzero, \\
+        #         & \mmone^T \mmgamma = 1,\ \mmgamma\in \bR^{m_1}_+, \\
+        #         & \mmone^T \mmmu = 1,\ \mmmu \in \bR^{m_2}_+, \\
+        #         & (\mm{\delta}, \delta_0) \in \cc{Q}^{d+1}
+        #     \end{aligned}
+        #     \hspace{3em}
+        #     \begin{aligned}
+        #     \maximize_{\mmw, s_1, s_2} \quad & (\mmzero, 1, 1)^T (\mmw, s_1, s_2) \\
+        #     \subto \quad & \mmP^T \mmw - s_1 \mmone \in \bR^{m_1}_+, \\
+        #     & -\mmQ^T \mmw - s_2 \mmone \in \bR^{m_2}_+, \\
+        #     & (\mmw, 0) + (\mmzero, 1) \in \cc{Q}^{d+1}
+        #     \end{aligned}
+        #     $
+        #     \end{itemize}
+        #     }}''', up=subtitle_scp)
+        # )
+
+        # scp_applications[-1][0][:32].set_color(BLUE)
+
+        # self.play(FadeIn(scp_applications[-1]), FadeOut(scp_applications[-2]))
+        # self.wait()
+        # self.next_slide()
+
+        # scp_applications.append(
+        #     MyTex(r'''\scalebox{0.9}{\parbox{15cm}{
+        #     Smallest enclosing ball
+        #     \begin{itemize}
+        #     \item[] $\displaystyle
+        #     \begin{aligned}
+        #         \minimize_{\mmz,\ r}\quad & r \\
+        #         \subto \quad & \|\mmz - \mmp_i\| \le r, \ \forall i \in [n]
+        #     \end{aligned}
+        #     $
+        #     \end{itemize}
+        #     }}''', up=scp_applications[-1])
+        # )
+
+        # scp_applications[-1][0][:21].set_color(BLUE)
+
+        # self.play(FadeIn(scp_applications[-1]))
+        # self.wait()
+        # self.next_slide()
+
+        # scp_applications.append(
+        #     MyTex(r'''\scalebox{0.9}{\parbox{15cm}{
+        #     Smallest enclosing ball
+        #     \begin{itemize}
+        #     \item[] $\displaystyle
+        #     \begin{aligned}
+        #         \minimize_{\mmz,\ r} \quad & (\mmzero, 1)^T (\mmz, r) \\
+        #         \subto \quad & \cproduct_{i=1}^n (\mmz - \mmp_i, r) \in \cproduct_{i=1}^n \cc{Q}^{d+1} \\
+        #     \end{aligned}
+        #     $
+        #     \end{itemize}
+        #     }}''', up=scp_applications[-2])
+        # )
+
+        # scp_applications[-1][0][:21].set_color(BLUE)
+
+        # self.play(FadeIn(scp_applications[-1]), FadeOut(scp_applications[-2]))
+        # self.wait()
+        # self.next_slide()
+
+        # self.play(FadeOut(*scp_applications[1:4:2]))
+
+
+
+
+#######################################################################################################################
+#######################################################################################################################
+#######################################################################################################################
+# Parallel Computing ##################################################################################################
 
         self.play(subtitle_scp.animate.move_to(outline_pos['subtitle_scp']),
             FadeIn(outline_title, subtitle_eja, subtitle_game, subtitle_geometry, subtitle_parallel, subtitle_conclu)
@@ -2903,6 +3037,10 @@ class Presentation(Slide):
         # self.next_slide()
         # self.play(FadeIn(subtitle_parallel), FadeOut(dimension_experiments))
 
+
+
+
+
         # # Conclusion ##################################################################################################
 
         # self.play(subtitle_parallel.animate.move_to(outline_pos['subtitle_parallel']),
@@ -2913,6 +3051,9 @@ class Presentation(Slide):
         #     FadeOut(outline_title, subtitle_eja, subtitle_game, subtitle_geometry, subtitle_scp, subtitle_parallel)
         # )
         # self.next_slide()
+
+
+
 
         # # ENDING #####################################################################################################
 
