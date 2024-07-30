@@ -2705,29 +2705,190 @@ class Presentation(Slide):
             {\bf\underline{Claim:}}
             If the index set $\cc{J} \triangleq \Big\{ j \in [m] : \lambda_{\min}(\mma_j) > 0,\ \lambda_{\min}(\mma_j') \ge 0 \Big\} \ne \varnothing$, let $R = \min_{j\in \cc{J}} {c_j \over  \lambda_{\min}(\mma_j)}$, there is an algorithm that solve the primal FTP in $O({R^2 \rho^2 \log r \over \eps^2})$ iterations.
         ''', edge_color=BLUE).next_to(scp_primal_dual_problem_group, DOWN, buff=0.5)
+        scp_primal_dual_claim.shift([-scp_primal_dual_claim.get_center()[0], 0, 0])
 
         self.play(FadeIn(scp_primal_dual_claim), FadeOut(scp_primal_dual_example))
         self.wait()
         self.next_slide()
 
         scp_primal_dual_claim_proof = MyTex(r'''
-            Just set $\cc{C} = \Big\{\mmx : \sum_{j=1}^m \mma_j' x_j - \mmb' \in \cc{K}' \Big\}$!
+            Just let $\cc{C} = \Big\{\mmx : \sum_{j=1}^m \mma_j' x_j - \mmb' \in \cc{K}' \Big\}$
         ''').set_color(BLUE).next_to(scp_primal_dual_claim, DOWN, buff=0.25)
 
         self.play(FadeIn(scp_primal_dual_claim_proof))
         self.wait()
         self.next_slide()
 
+        self.play(
+            FadeOut(scp_primal_dual_claim_proof),
+            scp_primal_dual_claim.animate.scale(0.45).to_edge(UR, buff=0.5).shift([0.2, 0, 0])
+        )
+        self.play(
+            scp_primal_dual_problem_group.animate.scale(0.65).next_to(scp_primal_dual_claim, DOWN, buff=0.2).to_edge(RIGHT, buff=0.4)
+        )
+        self.wait()
+        self.next_slide()
+
+        scp_primal_dual_proof = [ # 0
+            MyTex(r'''\scalebox{0.8}{\parbox{15cm}{
+                Let $\displaystyle \brmf(\mmx) = \sum_{j=1}^m \mma_j x_j - \mmb$\\
+                $\displaystyle \cc{A} = \Big\{ \mmx : \sum_{j=1}^m \mma_j' x_j - \mmb' \in \cc{K}', \ \mmc^T \mmx \le \hat{\alpha} \Big\}$
+            }}''', up=subtitle_scp)
+        ]
+
+        self.play(FadeIn(scp_primal_dual_proof[-1]))
+        self.wait()
+        self.next_slide()
+
+        scp_primal_dual_claim2 = Theorem(r'''
+            {\bf\underline{Claim:}}
+            If there exists $\xt{\mmy}{t}\in \cc{K}$ such that $\displaystyle \max_{\mmx\in \cc{A}}\ \brmf(\mmx) \bullet \xt{\mmy}{t} < 0$, we can construct a dual solution with objective $> \hat{\alpha}$.
+        ''').shift([0,-1,0])
+
+        self.play(FadeIn(scp_primal_dual_claim2))
+        self.wait()
+        self.next_slide()
+
+        self.play(scp_primal_dual_claim2.animate.scale(0.45).next_to(scp_primal_dual_claim, DOWN, buff=0.1))
+        self.play(
+            scp_primal_dual_problem_group.animate.next_to(scp_primal_dual_claim2, DOWN, buff=0.2).to_edge(RIGHT, buff=0.4)
+        )
+
+        self.wait()
+        self.next_slide()
+
+        scp_primal_dual_proof.append( # 1
+            MyTex(r'''\scalebox{0.8}{\parbox{15cm}{
+                Construction of dual solution
+            }}''', up=scp_primal_dual_proof[-1], buff=0.25).set_color(RED)
+        )
+
+        self.play(FadeIn(scp_primal_dual_proof[-1]))
+        self.wait()
+        self.next_slide()
+
+        scp_primal_dual_proof.append( # 2
+            MyTex(r'''\scalebox{0.8}{\parbox{15cm}{
+            The value of the following problem is less than 0:
+            \begin{myitemize}
+            \item[] $\displaystyle
+            \begin{aligned}
+                \max_{\mmx} \quad & \sum_{j=1}^m (\mma_j \bullet \xt{\mmy}{t})\cdot x_j - \mmb \bullet \xt{\mmy}{t} \\
+                {\rm s.t.} \quad 
+                & \mmc^T \mmx \le \hat{\alpha}, \\
+                & \sum_{j=1}^m \mma_j' x_j - \mmb' \in \cc{K}'
+            \end{aligned}
+            $
+            \end{myitemize}
+            }}''', up=scp_primal_dual_proof[-1], buff=0.25)
+        )
+
+        self.play(FadeIn(scp_primal_dual_proof[-1]))
+        self.wait()
+        self.next_slide()
+
+        scp_primal_dual_proof.append( # 3
+            MyTex(r'''\scalebox{0.8}{\parbox{15cm}{
+            The value of the following problem is greater than $\hat{\alpha}$:
+            \begin{myitemize}
+            \item[] $\displaystyle
+            \begin{aligned}
+                \min_{\mmx} \quad 
+                & \mmc^T \mmx \\
+                {\rm s.t.} \quad 
+                & \sum_{j=1}^m (\mma_j \bullet \xt{\mmy}{t})\cdot x_j - \mmb \bullet \xt{\mmy}{t} \ge 0, \\
+                & \sum_{j=1}^m \mma_j' x_j - \mmb' \in \cc{K}'
+            \end{aligned}
+            $
+            \end{myitemize}
+            }}''', up=scp_primal_dual_proof[-2], buff=0.25)
+        )
+
+        self.play(FadeIn(scp_primal_dual_proof[-1]), FadeOut(scp_primal_dual_proof[-2]))
+        self.wait()
+        self.next_slide()
+
+        scp_primal_dual_proof.append( # 4
+            MyTex(r'''\scalebox{0.8}{\parbox{15cm}{
+            The value of the following problem is greater than $\hat{\alpha}$:
+            \begin{myitemize}
+            \item[] $\displaystyle
+            \begin{aligned}
+                \min_{\mmx} \quad 
+                & \mmc^T \mmx \\
+                {\rm s.t.} \quad 
+                & \sum_{j=1}^m (\mma_j \bullet \xt{\mmy}{t})\cdot x_j - \mmb \bullet \xt{\mmy}{t} \ge 0, \\
+                & \sum_{j=1}^m \mma_j' x_j - \mmb' \in \cc{K}'
+            \end{aligned}
+            \hspace{2.5em}
+            \begin{aligned}
+                \max_{z,\ \mmy'} \quad & (\mmb \bullet \xt{\mmy}{t}) \cdot z + \mmb' \bdiamond \mmy' \\
+                {\rm s.t.} \quad & (\mma_j \bullet \xt{\mmy}{t})\cdot z + \mma_j' \bdiamond \mmy' = c_j, \ \forall j \in [m], \\
+                & z \ge 0, \ \mmy' \in \cc{K}'.
+            \end{aligned}
+            $
+            \end{myitemize}
+            }}''', up=scp_primal_dual_proof[-3], buff=0.25)
+        )
+
+        self.play(FadeIn(scp_primal_dual_proof[-1]), FadeOut(scp_primal_dual_proof[-2]))
+        self.wait()
+        self.next_slide()
+
+        scp_primal_dual_proof.append( # 5
+            MyTex(r'''\scalebox{0.8}{\parbox{15cm}{
+            The value of the following problem is greater than $\hat{\alpha}$:
+            \begin{myitemize}
+            \item[] $\displaystyle
+            \begin{aligned}
+                \max_{z,\ \mmy'} \quad & (\mmb \bullet \xt{\mmy}{t}) \cdot z + \mmb' \bdiamond \mmy' \\
+                {\rm s.t.} \quad & (\mma_j \bullet \xt{\mmy}{t})\cdot z + \mma_j' \bdiamond \mmy' = c_j, \ \forall j \in [m], \\
+                & z \ge 0, \ \mmy' \in \cc{K}'.
+            \end{aligned}
+            $
+            \end{myitemize}
+            }}''', up=scp_primal_dual_proof[-4], buff=0.25)
+        )
+
+        self.play(FadeIn(scp_primal_dual_proof[-1]), FadeOut(scp_primal_dual_proof[-2]))
+        self.wait()
+        self.next_slide()
+
+        scp_primal_dual_proof.append( # 6
+            MyTex(r'''\scalebox{0.8}{\parbox{15cm}{
+            Let $(\hat{z}, \hat{\mmy}')$ be the solution to the above:
+            \begin{myitemize}
+            \item $(\hat{z}\xt{\mmy}{t}, \hat{\mmy}')$ is a dual SCP solution with objective $> \hat{\alpha}$
+            \end{myitemize}
+            }}''', up=scp_primal_dual_proof[-1], buff=0.5)
+        )
+
+        self.play(FadeIn(scp_primal_dual_proof[-1]))
+        self.wait()
+        self.next_slide()
+
+        self.play(FadeOut(
+            scp_primal_dual_proof[6],
+            scp_primal_dual_proof[5],
+            *scp_primal_dual_proof[:2],
+            scp_primal_dual_claim,
+            scp_primal_dual_claim2,
+            scp_primal_dual_problem_group,
+            scp_subtitles[1]
+        ))
+        self.wait()
+        self.next_slide()
+
         # # Parallel Computing ##########################################################################################
 
-        # self.play(subtitle_scp.animate.move_to(outline_pos['subtitle_scp']),
-        #     FadeIn(outline_title, subtitle_eja, subtitle_game, subtitle_geometry, subtitle_parallel, subtitle_conclu)
-        # )
-        # self.next_slide()
-        # self.play(subtitle_parallel.animate.to_edge(UL, buff=0.5).set_color(WHITE),
-        #     FadeOut(outline_title, subtitle_eja, subtitle_game, subtitle_geometry, subtitle_scp, subtitle_conclu)
-        # )
-        # self.next_slide()
+        self.play(subtitle_scp.animate.move_to(outline_pos['subtitle_scp']),
+            FadeIn(outline_title, subtitle_eja, subtitle_game, subtitle_geometry, subtitle_parallel, subtitle_conclu)
+        )
+        self.next_slide()
+        self.play(subtitle_parallel.animate.to_edge(UL, buff=0.5).set_color(WHITE),
+            FadeOut(outline_title, subtitle_eja, subtitle_game, subtitle_geometry, subtitle_scp, subtitle_conclu)
+        )
+        self.next_slide()
 
         # inputsize_experiments = NExperiments()
         # self.play(FadeOut(subtitle_parallel))
