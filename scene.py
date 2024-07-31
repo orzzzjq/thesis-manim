@@ -164,7 +164,7 @@ def TitlePage():
     return VGroup(title, name, affliation, date)
 
 def DExperiments():
-    pd = ImageMobject("pictures/experiments/pd_n_100k.png").shift(UL, 1)
+    pd = ImageMobject("pictures/experiments/pd_n_100k.png").shift(UP * 2)
     seb = ImageMobject("pictures/experiments/ses_n_100k.png").next_to(pd, DOWN, buff=0.1)
     pd_text = Text("PD/SVM").rotate(PI/2).next_to(pd, LEFT).scale(0.5)
     seb_text = Text("SEB").rotate(PI/2).next_to(seb, LEFT).scale(0.5)
@@ -173,15 +173,13 @@ def DExperiments():
     return Group(group, title)
 
 def NExperiments():
-    pd = ImageMobject("pictures/experiments/pd_d_64.png").shift(UL, 1)
+    pd = ImageMobject("pictures/experiments/pd_d_64.png").shift(UP * 2)
     seb = ImageMobject("pictures/experiments/ses_d_64.png").next_to(pd, DOWN, buff=0.1)
     pd_text = Text("PD/SVM").rotate(PI/2).next_to(pd, LEFT).scale(0.5)
     seb_text = Text("SEB").rotate(PI/2).next_to(seb, LEFT).scale(0.5)
     group = Group(pd,seb,pd_text,seb_text).scale(0.9)
     title = Text("Different Input Sizes").rotate(PI/2).scale(0.6).next_to(group, LEFT)
     return Group(group, title)
-
-
 
 
 # def OutlinePage():
@@ -3024,24 +3022,233 @@ class Presentation(Slide):
         )
         self.next_slide()
 
-        # inputsize_experiments = NExperiments()
-        # self.play(FadeOut(subtitle_parallel))
-        # self.play(FadeIn(inputsize_experiments))
-        # self.wait()
-        # self.next_slide()
-        # self.play(FadeOut(inputsize_experiments))
+        parallel_subtitles = [
+            Text(': Theoretical analysis').set_font_size(25).next_to(subtitle_parallel, RIGHT, buff=0.1),
+            Text(': Experimental study').set_font_size(25).next_to(subtitle_parallel, RIGHT, buff=0.1)
+        ]
 
-        # dimension_experiments = DExperiments()
-        # self.play(FadeIn(dimension_experiments))
-        # self.wait()
-        # self.next_slide()
-        # self.play(FadeIn(subtitle_parallel), FadeOut(dimension_experiments))
+        self.play(Create(parallel_subtitles[0]))
+
+        parallel_work_depth = [ # 0
+            MyTex(r'''\scalebox{0.85}{\parbox{15cm}{
+            The work-depth model:
+            \begin{myitemize}
+            \vspace{-0.25em}
+            \item A computational process forms a DAG
+            \vspace{-0.25em}
+            \item The work is the total number of operations
+            \vspace{-0.25em}
+            \item The depth is the longest path in the DAG
+            \end{myitemize}
+            }}''', up=subtitle_parallel)
+        ]
+
+        parallel_work_depth[-1][0][:19].set_color(YELLOW)
+
+        self.play(FadeIn(parallel_work_depth[-1]))
+        self.wait()
+        self.next_slide()
+
+        parallel_work_depth.append( # 1
+            MyTex(r'''\scalebox{0.85}{\parbox{15cm}{
+            Parallel reduction method
+            }}''', up=parallel_work_depth[-1]).set_color(YELLOW)
+        )
+
+        self.play(FadeIn(parallel_work_depth[-1]))
+        self.wait()
+        self.next_slide()
+
+        parallel_work_depth.append( # 2
+            ImageMobject(r'pictures/parallel/1.png').scale(0.6).next_to(parallel_work_depth[-1], DOWN, buff=0.5)
+        )
+        parallel_work_depth[-1].to_edge(LEFT, buff=2)
+
+        parallel_work_depth.append( # 3
+            ImageMobject(r'pictures/parallel/2.png').scale(0.6).next_to(parallel_work_depth[-1], DOWN, buff=0.5)
+        )
+        parallel_work_depth[-1].move_to(parallel_work_depth[-2].get_center())
+
+        parallel_work_depth.append( # 4
+            ImageMobject(r'pictures/parallel/3.png').scale(0.6).next_to(parallel_work_depth[-1], DOWN, buff=0.5)
+        )
+        parallel_work_depth[-1].move_to(parallel_work_depth[-2].get_center())
+        
+        parallel_work_depth.append( # 5
+            ImageMobject(r'pictures/parallel/4.png').scale(0.6).next_to(parallel_work_depth[-1], DOWN, buff=0.5)
+        )
+        parallel_work_depth[-1].move_to(parallel_work_depth[-2].get_center())
+
+        self.play(FadeIn(parallel_work_depth[-4]))
+        self.wait()
+        self.next_slide()
+
+        self.play(FadeIn(parallel_work_depth[-3]), FadeOut(parallel_work_depth[-4]))
+        self.wait()
+        self.next_slide()
+
+        self.play(FadeIn(parallel_work_depth[-2]), FadeOut(parallel_work_depth[-3]))
+        self.wait()
+        self.next_slide()
+
+        self.play(FadeIn(parallel_work_depth[-1]), FadeOut(parallel_work_depth[-2]))
+        self.wait()
+        self.next_slide()
+
+        parallel_work_depth.append( # 6
+            MyTex(r'''\scalebox{0.85}{\parbox{15cm}{
+            $O(n)$ work, $O(\log n)$ depth
+            }}''').set_color(RED).next_to(parallel_work_depth[1], RIGHT, buff=0.5)
+        )
+
+        self.play(FadeIn(parallel_work_depth[-1]))
+        self.wait()
+        self.next_slide()
+
+        self.play(FadeOut(
+            parallel_work_depth[6],
+            parallel_work_depth[5],
+            parallel_work_depth[1],
+            parallel_work_depth[0]
+        ))
+
+        parallel_table = MyTex(r'''
+            \begin{table*}
+            \begin{center}
+            \renewcommand{\arraystretch}{1.1}
+            \begin{tabular}{|c|wl{6cm}|wc{3.3cm}|wc{3.3cm}|}
+            \hline
+            \multicolumn{2}{|c|}{Problem} & Work & Depth \\ 
+            \hline\hline
+            \multicolumn{2}{|c|}{PD (Hard-SVM)} & \scalebox{.85}{$O({R^2(N+d)\log M \over \eps^2})$} & \scalebox{.85}{$O({R^2 \log(Md) \log M \over \eps^2})$} \\\hline
+            \multicolumn{2}{|c|}{SEB of Balls} & \scalebox{.85}{$O({nd \log n \over \eps^2})$} & \scalebox{.85}{$O({\log (nd) \log n \over \eps^2})$} \\\hline
+            \parbox[t]{2mm}{\multirow{9}{*}{\rotatebox[origin=c]{90}{SIB of}}}
+            & Convex Polytopes & \scalebox{.85}{$O({R^2(N + nd) \log n \over \eps^2})$} & \scalebox{.85}{$O({R^2 \log (Md) \log n \over \eps^2})$} \\
+            & ├─ PD (Hard-SVM) & \scalebox{.85}{$O({R^2(N+d) \over \eps^2})$} & \scalebox{.85}{$O({R^2 \log (Md) \over \eps^2})$} \\
+            & ├─ SEB of Points (Hard-SVDD) & \scalebox{.85}{$O({nd \log n \over \eps^2})$} & \scalebox{.85}{$O({\log (nd) \log n \over \eps^2})$} \\
+            & └─ Line Segments & \scalebox{.85}{$O({R^2 nd \log n \over \eps^2})$} & \scalebox{.85}{$O({R^2 \log (nd) \log n \over \eps^2})$} \\\cline{2-4}
+            & Reduced Polytopes & \scalebox{.85}{$O({R^2(N + nd) \log n \over \eps^2})$} & \scalebox{.85}{$O({R^2 \log (Md) \log n \over \eps^2})$} \\
+            & └─ Soft-SVM ($C$-SVM, $\nu$-SVM) & \scalebox{.85}{$O({R^2(N+d) \over \eps^2})$} & \scalebox{.85}{$O({R^2 \log (Md) \over \eps^2})$} \\\cline{2-4}
+            & AABBs (Imprecise Points) & \scalebox{.85}{$O({R^2 nd \log n \over \eps^2})$} & \scalebox{.85}{$O({R^2 \log (nd) \log n \over \eps^2})$} \\\cline{2-4}
+            & Balls (Imprecise Points) & \scalebox{.85}{$O({R^2 nd \log n \over \eps^2})$} & \scalebox{.85}{$O({R^2 \log (nd) \log n \over \eps^2})$} \\\cline{2-4}
+            & Ellipsoids (Distributions) & \scalebox{.85}{$O(nd^\omega + {R^2 nd^2 \log n \over \eps^2})$} & \scalebox{.85}{$O(nd^\omega + {R^2 \log (nd) \log n \over \eps^2})$} \\\hline
+            \multicolumn{2}{|c|}{Soft-SIB of Points (Soft-SVDD)} & \scalebox{.85}{$O({R^2 nd \log n \over \eps^2})$} & \scalebox{.85}{$O({R^2 \log (nd) \log n \over \eps^2})$} \\\hline
+            \multicolumn{2}{|c|}{PD/SVM in SCP Form} & \scalebox{.85}{$O({R^2 (N + d) \log M \over \eps^2})$} & \scalebox{.85}{$O({R^2 \log(Md) \log M \over \eps^2})$} \\\hline
+            \multicolumn{2}{|c|}{SEB of Points in SCP Form} & \scalebox{.85}{$O({nd \log n \over \eps^2})$} & \scalebox{.85}{$O({\log (nd) \log n \over \eps^2})$} \\\hline
+            \end{tabular}
+            \end{center}
+            \end{table*}
+        ''').scale(0.8).next_to(subtitle_parallel, DOWN, buff=0.5)
+        parallel_table.shift([-parallel_table.get_center()[0], 0, 0])
+
+        self.play(FadeIn(parallel_table))
+        self.wait()
+        self.next_slide()
+
+        self.play(FadeOut(parallel_table, parallel_subtitles[0]))
+        self.play(Create(parallel_subtitles[1]))
+        self.wait()
+        self.next_slide()
+
+        parallel_experiment = [
+            MyTex(r'''\scalebox{0.85}{\parbox{15cm}{
+            Our implementation for PD/SVM and SEB:
+            \begin{myitemize}
+            \item PDSCP: sequential (CPU) version, implemented in C++
+            \vspace{-0.4em}
+            \item PDSCP-ST: parallel (GPU) version, implemented in CUDA
+            \vspace{-0.4em}
+            \item Some ``standard'' strategies: line search, early stopping, etc.
+            \end{myitemize}
+            }}''', up=subtitle_parallel)
+        ]
+        
+        parallel_experiment[-1][0][:33].set_color(YELLOW)
+
+        parallel_experiment[-1][0][34:40].set_color(RED)
+        parallel_experiment[-1][0][80:89].set_color(RED)
+
+        self.play(Create(parallel_experiment[-1]))
+        self.wait()
+        self.next_slide()
+
+        parallel_experiment.append(
+            MyTex(r'''\scalebox{0.85}{\parbox{15cm}{
+            Other solvers for comparison:
+            \begin{myitemize}
+            \item Cplex-QP: multi-threaded IPM QP solver by IBM
+            \vspace{-0.4em}
+            \item Cplex-SCP: multi-threaded IPM SCP solver by IBM
+            \vspace{-0.4em}
+            \item Gurobi-QP: multi-threaded IPM QP solver by Gurobi
+            \vspace{-0.4em}
+            \item Gurobi-SCP: multi-threaded IPM SCP solver by Gurobi
+            \vspace{-0.4em}
+            \item CGAL: sequential simplex-based QP solver in CGAL
+            \vspace{-0.4em}
+            \item XXX-ST: the sequential version of XXX
+            \end{myitemize}
+            }}''', up=parallel_experiment[-1])
+        )
+        
+        parallel_experiment[-1][0][:26].set_color(YELLOW)
+
+        parallel_experiment[-1][0][27:36].set_color(RED)
+        parallel_experiment[-1][0][67:77].set_color(RED)
+        parallel_experiment[-1][0][109:119].set_color(RED)
+        parallel_experiment[-1][0][153:164].set_color(RED)
+        parallel_experiment[-1][0][199:204].set_color(RED)
+        parallel_experiment[-1][0][242:249].set_color(RED)
+
+        self.play(Create(parallel_experiment[-1]))
+        self.wait()
+        self.next_slide()
+
+        parallel_experiment.append(
+            MyTex(r'''\scalebox{0.85}{\parbox{15cm}{
+            Hardware:
+            \begin{myitemize}
+            \item CPU: Intel Core i7-9700K
+            \begin{myitemize}
+                \vspace{-0.4em}
+                \item 32GB memory, 8 cores
+            \end{myitemize}
+            \vspace{-0.4em}
+            \item GPU: NVIDIA RTX 2080Ti
+            \begin{myitemize}
+                \vspace{-0.4em}
+                \item 11GB memory, 4352 cores
+            \end{myitemize}
+            \end{myitemize}
+            }}''').to_edge(RIGHT, buff=0.6).shift(DOWN)
+        )
+
+        parallel_experiment[-1][0][:9].set_color(BLUE)
+
+        self.play(Create(parallel_experiment[-1]))
+        self.wait()
+        self.next_slide()
+        
+        inputsize_experiments = NExperiments()
+        self.play(FadeOut(subtitle_parallel, *parallel_experiment, parallel_subtitles[1]))
+        self.play(FadeIn(inputsize_experiments))
+        self.wait()
+        self.next_slide()
+        self.play(FadeOut(inputsize_experiments))
+
+        dimension_experiments = DExperiments()
+        self.play(FadeIn(dimension_experiments))
+        self.wait()
+        self.next_slide()
+        self.play(FadeIn(subtitle_parallel), FadeOut(dimension_experiments))
 
 
 
 
-
-        # # Conclusion ##################################################################################################
+############################################################################################################################
+############################################################################################################################
+############################################################################################################################
+# Conclusion ###############################################################################################################
 
         # self.play(subtitle_parallel.animate.move_to(outline_pos['subtitle_parallel']),
         #     FadeIn(outline_title, subtitle_eja, subtitle_game, subtitle_geometry, subtitle_scp, subtitle_conclu)
@@ -3055,6 +3262,9 @@ class Presentation(Slide):
 
 
 
-        # # ENDING #####################################################################################################
+############################################################################################################################
+############################################################################################################################
+############################################################################################################################
+# ENDING ###################################################################################################################
 
         # self.play(FadeOut(subtitle_conclu), FadeIn(Text("Thank you for listening").scale(0.7)))
