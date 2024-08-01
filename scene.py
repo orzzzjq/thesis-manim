@@ -315,310 +315,481 @@ class Presentation(Slide):
         )
 
 
-        intro_geometry_text = MyTex(r'''
-        A geometric optimization problem is to find a geometric object of some type that is optimal according to \underline{some criterion}, among all objects of this type that satisfy \underline{a certain geometric condition}.
+        # intro_geometry_text = MyTex(r'''
+        # A geometric optimization problem is to find a geometric object of some type that is optimal according to \underline{some criterion}, among all objects of this type that satisfy \underline{a certain geometric condition}.
+        # ''')
+
+        # intro_geometry_text[0][1:22].set_color(BLUE)
+
+        # self.play(Create(intro_geometry_text))
+        # self.wait()
+        # self.next_slide()
+
+        # self.play(intro_geometry_text.animate.scale(0.6).next_to(subtitle_geometry, DOWN, buff=0.25), run_time=1)
+
+        # ## polytope distance & svm
+        
+        # geometry_pd_p_hall = Polygon(*np.c_[pd.p_points_hall, np.zeros(pd.p_points_hall.shape[0])], color=YELLOW, fill_opacity=0.3)
+        # geometry_pd_q_hall = Polygon(*np.c_[pd.q_points_hall, np.zeros(pd.q_points_hall.shape[0])], color=BLUE, fill_opacity=0.3)
+
+        # geometry_pd_p_dots = [Dot([*pd.p_points[i], 0], color=YELLOW) for i in range(len(pd.p_points))]
+        # geometry_pd_q_dots = [Dot([*pd.q_points[i], 0], color=BLUE) for i in range(len(pd.q_points))]
+
+        # geometry_pd_p_dots_group = Group(*geometry_pd_p_dots)
+        # geometry_pd_q_dots_group = Group(*geometry_pd_q_dots)
+
+        # geometry_pd_p_tex = MyTex(r'$\cc{P}$').scale(1.5).next_to(geometry_pd_p_dots_group, DOWN, buff=0.25).set_color(YELLOW)
+        # geometry_pd_q_tex = MyTex(r'$\cc{Q}$').scale(1.5).next_to(geometry_pd_q_dots_group, DOWN, buff=0.25).set_color(BLUE)
+        
+        # intro_pd_text = Text(r'Polytope Distance (PD)').set_font_size(32).set_color(RED).next_to(geometry_pd_q_tex, DOWN, buff=0.25)
+        # intro_pd_text.shift([-intro_pd_text.get_center()[0], 0, 0])
+
+        # geometry_pd_opt_line = Line(*pd.optimal_line_seg, color=RED)
+
+        # geometry_pd_draw_group = Group(intro_pd_text, geometry_pd_p_dots_group, geometry_pd_q_dots_group, geometry_pd_p_hall, geometry_pd_q_hall, geometry_pd_opt_line, geometry_pd_p_tex, geometry_pd_q_tex)
+
+        # ## support vector machine
+
+        # geometry_svm_p_dots_group = geometry_pd_p_dots_group.copy()
+        # geometry_svm_q_dots_group = geometry_pd_q_dots_group.copy()
+
+        # geometry_svm_p_hall = geometry_pd_p_hall.copy()
+        # geometry_svm_q_hall = geometry_pd_q_hall.copy()
+
+        # geometry_svm_p_tex = geometry_pd_p_tex.copy()
+        # geometry_svm_q_tex = geometry_pd_q_tex.copy()
+
+        # intro_svm_text = Text(r'Support Vector Machine (SVM)').set_font_size(32).set_color(RED).next_to(geometry_svm_q_tex, DOWN, buff=0.25)
+        # intro_svm_text.shift([-intro_svm_text.get_center()[0], 0, 0])
+
+        # geometry_svm_draw_subgroup = Group(
+        #     geometry_svm_p_dots_group,
+        #     geometry_svm_q_dots_group,
+        #     geometry_svm_p_hall,
+        #     geometry_svm_q_hall,
+        #     geometry_svm_p_tex,
+        #     geometry_svm_q_tex
+        # )
+
+        # geometry_svm_line = Line(*pd.optimal_svm_line, color=RED)
+        # geometry_svm_dashedline = [
+        #     DashedLine(*pd.optimal_svm_line, color=RED).shift(LEFT * 0.75),
+        #     DashedLine(*pd.optimal_svm_line, color=RED).shift(-LEFT * 0.75),
+        # ]
+
+        # geometry_svm_draw_group = Group(geometry_svm_draw_subgroup, geometry_svm_line, *geometry_svm_dashedline, intro_svm_text)
+
+        # ### animation
+
+        # #### polytope distance
+
+        # geometry_pd_draw_group.scale(0.8).next_to(intro_geometry_text, DOWN, buff=0.5)
+
+        # self.play(Create(geometry_pd_p_hall), Create(geometry_pd_q_hall))
+        # self.wait()
+        # self.next_slide()
+
+        # self.play(Create(geometry_pd_opt_line))
+        # self.wait()
+        # self.next_slide()
+
+        # self.play(Create(intro_pd_text))
+        # self.wait()
+        # self.next_slide()
+
+        # self.play(FadeIn(geometry_pd_p_dots_group, geometry_pd_q_dots_group, geometry_pd_p_tex, geometry_pd_q_tex))
+        # self.wait()
+        # self.next_slide()
+
+        # self.play(geometry_pd_draw_group.animate.scale(0.65 / 0.8).to_edge(LEFT, buff=0.5))
+
+        # #### svm
+
+        # geometry_svm_draw_group.scale(0.65).to_edge(RIGHT, buff=0.5)
+
+        # self.play(FadeIn(geometry_svm_draw_subgroup))
+        # self.play(Create(geometry_svm_line))
+        # self.play(
+        #     FadeOut(geometry_svm_p_hall, geometry_svm_q_hall),
+        #     FadeIn(*geometry_svm_dashedline, intro_svm_text)
+        # )
+        # self.wait()
+        # self.next_slide()
+
+        # self.play(
+        #     FadeOut(
+        #         geometry_svm_p_dots_group,
+        #         geometry_svm_q_dots_group,
+        #         geometry_svm_p_tex,
+        #         geometry_svm_q_tex,
+        #         geometry_svm_line, 
+        #         *geometry_svm_dashedline, 
+        #         intro_svm_text
+        #     ),
+        #     geometry_pd_draw_group.animate.scale(0.4).to_edge(UL, buff=0.4)
+        # )
+        # self.wait()
+        # self.next_slide()
+
+
+        # ## smallset enclosing ball
+        
+        # geometry_draw_seb = Circle(radius=sebb.radius, color=RED, fill_opacity=0.3)
+        # intro_seb_text = Text('Smallset Enclosing Ball (SEB)').set_font_size(32).set_color(RED).next_to(geometry_draw_seb, DOWN, buff=0.5)
+        
+        # geometry_draw_seb_group = Group(geometry_draw_seb, *sebb.objects, intro_seb_text)
+
+        # ### animation
+        # geometry_draw_seb_group.scale(0.8).next_to(intro_geometry_text, DOWN, buff=0.5)
+
+        # self.play(FadeIn(*sebb.objects))
+        # self.wait()
+        # self.next_slide()
+
+        # self.play(Create(geometry_draw_seb))
+        # self.play(Create(intro_seb_text))
+        # self.wait()
+        # self.next_slide()
+
+        # ### sebb
+
+        # self.play(FadeOut(geometry_draw_seb_group))
+
+        # geometry_draw_sebb = Circle(radius=2.75, color=RED, fill_opacity=0.3).move_to([0.28, -0.07, 0])
+        # intro_sebb_text = Text('SEB of Balls (SEBB)').set_font_size(32).set_color(RED).next_to(geometry_draw_sebb, DOWN, buff=0.5)
+        # geometry_draw_sebb_objects = [x.copy() for x in sib.objects]
+        # geometry_draw_sebb_group = Group(geometry_draw_sebb, *geometry_draw_sebb_objects, intro_sebb_text)
+
+        # #### animation
+        # geometry_draw_sebb_group.scale(0.8).next_to(intro_geometry_text, DOWN, buff=0.5)
+
+        # self.play(FadeIn(*geometry_draw_sebb_objects))
+        # self.wait()
+        # self.next_slide()
+
+        # self.play(Create(geometry_draw_sebb))
+        # self.play(Create(intro_sebb_text))
+        # self.wait()
+        # self.next_slide()
+
+        # self.play(
+        #     geometry_draw_sebb_group.animate.scale(0.4 * 0.65 / 0.8).to_edge(UR, buff=0.4)
+        # )
+        # self.wait()
+        # self.next_slide()
+
+        
+        # ## smallest intersecting ball
+
+        # geometry_draw_sib = Circle(radius=2, color=RED, fill_opacity=0.3)
+        # geometry_draw_sib_objects = [x.copy() for x in sib.objects]
+        # geometry_draw_sib_subgroup = Group(geometry_draw_sib, *geometry_draw_sib_objects)
+        # intro_sib_text = Text('Smallest Intersecting Ball (SIB)').set_font_size(32).set_color(RED).next_to(geometry_draw_sib_subgroup, DOWN, buff=0.5)
+        # geometry_draw_sib_group = Group(geometry_draw_sib_subgroup, intro_sib_text)
+
+        # #### animation
+        # geometry_draw_sib_group.scale(0.8).next_to(intro_geometry_text, DOWN, buff=0.5)
+
+        # self.play(FadeIn(*geometry_draw_sib_objects))
+        # self.wait()
+        # self.next_slide()
+
+        # self.play(Create(geometry_draw_sib))
+        # self.play(Create(intro_sib_text))
+        # self.wait()
+        # self.next_slide()
+
+        # self.play(
+        #     geometry_draw_sib_group.animate.scale(0.4 * 0.65 / 0.8).next_to(geometry_pd_draw_group, DOWN, buff=0.25).to_edge(LEFT, buff=0.4)
+        # )
+        # self.wait()
+        # self.next_slide()
+        
+        
+        # ## Soft-SIB
+
+        # geometry_draw_soft_sib = Circle(radius=sib.soft_radius, color=RED, fill_opacity=0.3).shift(sib.soft_center)
+        # geometry_draw_soft_sib_margin = DashedVMobject(Circle(radius=sib.soft_margin_radius, color=RED, fill_opacity=0.3).shift(sib.soft_center))
+        # geometry_draw_soft_sib_objects = [x.copy() for x in sib.objects]
+        # geometry_draw_soft_sib_subgroup = Group(geometry_draw_soft_sib, *geometry_draw_soft_sib_objects, geometry_draw_soft_sib_margin)
+        # intro_soft_sib_text = Text('Soft-SIB').set_font_size(32).set_color(RED).next_to(geometry_draw_soft_sib_subgroup, DOWN, buff=0.5)
+        # geometry_draw_soft_sib_group = Group(geometry_draw_soft_sib_subgroup, intro_soft_sib_text)
+
+        # #### animation
+        # geometry_draw_soft_sib_group.scale(0.8).next_to(intro_geometry_text, DOWN, buff=0.5)
+
+        # self.play(FadeIn(*geometry_draw_soft_sib_objects))
+        # self.wait()
+        # self.next_slide()
+
+        # self.play(Create(geometry_draw_soft_sib))
+        # self.play(FadeIn(geometry_draw_soft_sib_margin))
+        # self.play(Create(intro_soft_sib_text))
+        # self.wait()
+        # self.next_slide()
+
+        # geometry_intro_list = [
+        #     geometry_pd_draw_group.copy(),
+        #     geometry_draw_sebb_group.copy(),
+        #     geometry_draw_sib_group.copy(),
+        #     geometry_draw_soft_sib_group.copy().scale(0.4 * 0.65 / 0.8)
+        # ]
+
+        # geometry_intro_list[1].next_to(geometry_intro_list[0], RIGHT, buff=1)
+        # geometry_intro_list[3].next_to(geometry_intro_list[1], DOWN, buff=0.25)
+        # geometry_intro_list[2].move_to([geometry_intro_list[0].get_center()[0], geometry_intro_list[3].get_center()[1], 0])
+
+        # geometry_intro_hidden_group = Group(*geometry_intro_list)
+
+        # geometry_intro_hidden_group.scale(1.5).next_to(intro_geometry_text, DOWN, buff=0.25)
+
+        # # self.add(geometry_intro_hidden_group)
+
+        # self.play(
+        #     geometry_pd_draw_group.animate.scale(1.5).move_to(geometry_intro_list[0].get_center()),
+        #     geometry_draw_sebb_group.animate.scale(1.5).move_to(geometry_intro_list[1].get_center()),
+        #     geometry_draw_sib_group.animate.scale(1.5).move_to(geometry_intro_list[2].get_center()),
+        #     geometry_draw_soft_sib_group.animate.scale(0.4 * 0.65 * 1.5 / 0.8).move_to(geometry_intro_list[3].get_center())
+        # )
+        # self.wait()
+        # self.next_slide()
+
+        # self.play(
+        #     FadeOut(
+        #         intro_geometry_text,
+        #         geometry_pd_draw_group,
+        #         geometry_draw_sebb_group,
+        #         geometry_draw_sib_group,
+        #         geometry_draw_soft_sib_group
+        #     )
+        # )
+
+
+        ## Intro - Symmetric Cone Programming
+        self.play(
+            intro_circle_geometry.animate.scale(1 / 10).set_fill(BLUE, opacity=0.1),
+            subtitle_geometry.animate.set_font_size(25).move_to(intro_pos['subtitle_geometry']),
+            intro_circle_scp.animate.move_to(intro_pos['circle_scp']),
+            subtitle_scp.animate.move_to(intro_pos['subtitle_scp']),
+            intro_circle_parallel.animate.move_to(intro_pos['circle_parallel']),
+            subtitle_parallel.animate.move_to(intro_pos['subtitle_parallel'])
+        )
+
+        self.next_slide()
+
+        self.play(Rotate(intro_group, PI* 2 / 3, about_point=(intro_circle_geometry.get_center() + intro_circle_scp.get_center() + intro_circle_parallel.get_center())/3))
+
+        intro_pos['circle_geometry'] = intro_circle_geometry.get_center()
+        intro_pos['circle_scp'] = intro_circle_scp.get_center()
+        intro_pos['circle_parallel'] = intro_circle_parallel.get_center()
+        intro_pos['subtitle_geometry'] = subtitle_geometry.get_center()
+        intro_pos['subtitle_scp'] = subtitle_scp.get_center()
+        intro_pos['subtitle_parallel'] = subtitle_parallel.get_center()
+
+        self.play(
+            intro_circle_geometry.animate.shift(DR * 10),
+            subtitle_geometry.animate.shift(DR * 10),
+            intro_circle_scp.animate.scale(10).set_fill(None, opacity=0),
+            subtitle_scp.animate.set_font_size(30).to_edge(UP, buff=0.5),
+            intro_circle_parallel.animate.shift(DL * 10),
+            subtitle_parallel.animate.shift(DL * 10)
+        )
+
+
+        intro_scp_text = MyTex(r'''\parbox{15cm}{
+        A symmetric cone program is a \underline{linear optimization} problem over a \underline{symmetric cone}.
+        }''')
+        intro_scp_text[0][1:21].set_color(YELLOW)
+
+        self.play(Create(intro_scp_text))
+        self.wait()
+        self.next_slide()
+
+        self.play(intro_scp_text.animate.scale(0.65).next_to(subtitle_scp, DOWN, buff=0.25), run_time=1)
+
+        intro_scp_formulation = [
+            MyTex(r'''
+            $\displaystyle
+            \begin{aligned}
+            \minimize \quad & \mmc^T \mmx \\
+            \subto \quad & \mmA \mmx - \mmb \in \cc{K}
+            \end{aligned}
+            $
+            ''')
+        ]
+
+        self.play(FadeIn(intro_scp_formulation[-1]))
+        self.wait()
+        self.next_slide()
+        
+        intro_scp_formulation.append(
+            Text('Primal').set_font_size(24).set_color(RED).next_to(intro_scp_formulation[-1], UP, buff=0.25)
+        )
+
+        intro_scp_primal_group = Group(intro_scp_formulation[-1], intro_scp_formulation[-2])
+
+        self.play(FadeIn(intro_scp_formulation[-1]))
+        self.wait()
+        self.next_slide()
+
+        intro_scp_formulation.append(
+            MyTex(r'''
+            $\displaystyle
+            \begin{aligned}
+            \maximize \quad & \mmb \bullet \mmy \\
+            \subto \quad & \mma_j \bullet \mmy = c_j,\ \forall j \in [m],\\
+            & \mmy \in \cc{K}
+            \end{aligned}
+            $
+            ''')
+        )
+        
+        intro_scp_formulation.append(
+            Text('Dual').set_font_size(24).set_color(RED).next_to(intro_scp_formulation[-1], UP, buff=0.25)
+        )
+
+        self.play(intro_scp_primal_group.animate.shift(LEFT * 3))
+
+        intro_scp_dual_group = Group(intro_scp_formulation[-1], intro_scp_formulation[-2]).next_to(intro_scp_primal_group, RIGHT, buff=1)
+        intro_scp_dual_group.shift([0, intro_scp_primal_group.get_top()[1] - intro_scp_dual_group.get_top()[1], 0])
+
+        self.play(FadeIn(intro_scp_dual_group))
+        self.wait()
+        self.next_slide()
+
+        intro_scp_group = Group(intro_scp_primal_group, intro_scp_dual_group)
+
+        self.play(
+            intro_scp_group.animate.scale(0.7).next_to(intro_scp_text, DOWN, buff=0.25)
+        )
+        self.wait()
+        self.next_slide()
+
+        intro_scp_examples = [
+            MyTex(r'''
+            $\displaystyle
+            \begin{gathered}
+            \text{Linear Program}\\
+            \begin{aligned}[t]
+            \minimize \quad & \mmc^T \mmx \\
+            \subto \quad & \mmA \mmx - \mmb \ge 0
+            \end{aligned}
+            \hspace{3em}
+            \begin{aligned}[t]
+            \maximize \quad & \mmb^T \mmy \\
+            \subto \quad & \mmA^T \mmy = \mmc, \\
+            & \mmy \ge 0
+            \end{aligned}
+            \end{gathered}
+            $
+            ''').next_to(intro_scp_group, DOWN, buff=1)
+        ]
+
+        intro_scp_examples[-1][0][:13].set_color(BLUE)
+
+        self.play(FadeIn(intro_scp_examples[-1]))
+        self.wait()
+        self.next_slide()
+
+        intro_scp_examples.append(
+            MyTex(r'''
+            $\displaystyle
+            \begin{gathered}
+            \text{Semidefinite Program}\\
+            \begin{aligned}[t]
+            \minimize \quad & \mmc^T \mmx \\
+            \subto \quad & \sum_{j=1}^m \mmA_j x_j - \mmB \succeq 0
+            \end{aligned}
+            \hspace{3em}
+            \begin{aligned}[t]
+            \maximize \quad & \Tr(\mmB \mmY) \\
+            \subto \quad & \Tr(\mmA_j \mmY) = c_j,\ \forall j \in [m], \\
+            & \mmY \succeq 0
+            \end{aligned}
+            \end{gathered}
+            $
+            ''').next_to(intro_scp_group, DOWN, buff=1)
+        )
+
+        intro_scp_examples[-1][0][:18].set_color(BLUE)
+
+        self.play(FadeIn(intro_scp_examples[-1]), FadeOut(intro_scp_examples[-2]))
+        self.wait()
+        self.next_slide()
+
+        intro_scp_examples.append(
+            MyTex(r'''
+            $\displaystyle
+            \begin{gathered}
+            \text{Second-Order Cone Program}\\
+            \begin{aligned}[t]
+            \maximize \quad & \mmc^T \mmx \\
+            \subto \quad & \mmA_i \mmx - \mmb_i \in \cc{Q}^{d_i + 1},\ \forall i \in [n] \\
+            \end{aligned}
+            \hspace{3em}
+            \begin{aligned}[t]
+            \minimize \quad & \mmb_1^T \mmy_1 + \dots + \mmb_n^T \mmy_n \\
+            \subto \quad & \mmA_1^T \mmy_1 + \dots + \mmA_n^T \mmy_n = \mmc, \\
+            & \mmy_i \in \cc{Q}^{d_i + 1}, \ \forall i \in [n]
+            \end{aligned}
+            \end{gathered}
+            $
+            ''').next_to(intro_scp_group, DOWN, buff=1)
+        )
+
+        intro_scp_examples[-1][0][:23].set_color(BLUE)
+
+        self.play(FadeIn(intro_scp_examples[-1]), FadeOut(intro_scp_examples[-2]))
+        self.wait()
+        self.next_slide()
+
+        self.play(
+            FadeOut(intro_scp_examples[-1]),
+            intro_scp_group.animate.scale(1 / 0.7).move_to([0,0,0])
+        )
+        self.wait()
+        self.next_slide()
+        
+        self.play(FadeOut(intro_scp_group, intro_scp_text))
+
+        ## Intro - Parallel Computing
+        self.play(
+            intro_circle_geometry.animate.move_to(intro_pos['circle_geometry']),
+            subtitle_geometry.animate.move_to(intro_pos['subtitle_geometry']),
+            intro_circle_scp.animate.scale(1 / 10).set_fill(YELLOW, opacity=0.1),
+            subtitle_scp.animate.set_font_size(22).move_to(intro_pos['subtitle_scp']),
+            intro_circle_parallel.animate.move_to(intro_pos['circle_parallel']),
+            subtitle_parallel.animate.move_to(intro_pos['subtitle_parallel'])
+        )
+
+        self.next_slide()
+
+        self.play(Rotate(intro_group, - PI / 3, about_point=(intro_circle_geometry.get_center() + intro_circle_scp.get_center() + intro_circle_parallel.get_center())/3))
+
+        intro_pos['circle_geometry'] = intro_circle_geometry.get_center()
+        intro_pos['circle_scp'] = intro_circle_scp.get_center()
+        intro_pos['circle_parallel'] = intro_circle_parallel.get_center()
+        intro_pos['subtitle_geometry'] = subtitle_geometry.get_center()
+        intro_pos['subtitle_scp'] = subtitle_scp.get_center()
+        intro_pos['subtitle_parallel'] = subtitle_parallel.get_center()
+
+        self.play(
+            intro_circle_geometry.animate.shift(UL * 10),
+            subtitle_geometry.animate.shift(UL * 10),
+            intro_circle_scp.animate.shift(UR * 10),
+            subtitle_scp.animate.shift(UR * 10),
+            intro_circle_parallel.animate.scale(10).set_fill(None, opacity=0),
+            subtitle_parallel.animate.set_font_size(30).to_edge(UP, buff=0.5)
+        )
+
+        self.next_slide()
+
+        intro_parallel_text = MyTex(r'''
+            Why do we started to investigate these problems?
         ''')
 
-        intro_geometry_text[0][1:22].set_color(BLUE)
-
-        self.play(Create(intro_geometry_text))
-        self.wait()
-        self.next_slide()
-
-        self.play(intro_geometry_text.animate.scale(0.6).next_to(subtitle_geometry, DOWN, buff=0.25), run_time=1)
-
-        ## polytope distance & svm
+        self.play(Create(intro_parallel_text))
         
-        geometry_pd_p_hall = Polygon(*np.c_[pd.p_points_hall, np.zeros(pd.p_points_hall.shape[0])], color=YELLOW, fill_opacity=0.3)
-        geometry_pd_q_hall = Polygon(*np.c_[pd.q_points_hall, np.zeros(pd.q_points_hall.shape[0])], color=BLUE, fill_opacity=0.3)
-
-        geometry_pd_p_dots = [Dot([*pd.p_points[i], 0], color=YELLOW) for i in range(len(pd.p_points))]
-        geometry_pd_q_dots = [Dot([*pd.q_points[i], 0], color=BLUE) for i in range(len(pd.q_points))]
-
-        geometry_pd_p_dots_group = Group(*geometry_pd_p_dots)
-        geometry_pd_q_dots_group = Group(*geometry_pd_q_dots)
-
-        geometry_pd_p_tex = MyTex(r'$\cc{P}$').scale(1.5).next_to(geometry_pd_p_dots_group, DOWN, buff=0.25).set_color(YELLOW)
-        geometry_pd_q_tex = MyTex(r'$\cc{Q}$').scale(1.5).next_to(geometry_pd_q_dots_group, DOWN, buff=0.25).set_color(BLUE)
-        
-        intro_pd_text = Text(r'Polytope Distance (PD)').set_font_size(32).set_color(RED).next_to(geometry_pd_q_tex, DOWN, buff=0.25)
-        intro_pd_text.shift([-intro_pd_text.get_center()[0], 0, 0])
-
-        geometry_pd_opt_line = Line(*pd.optimal_line_seg, color=RED)
-
-        geometry_pd_draw_group = Group(intro_pd_text, geometry_pd_p_dots_group, geometry_pd_q_dots_group, geometry_pd_p_hall, geometry_pd_q_hall, geometry_pd_opt_line, geometry_pd_p_tex, geometry_pd_q_tex)
-
-        ## support vector machine
-
-        geometry_svm_p_dots_group = geometry_pd_p_dots_group.copy()
-        geometry_svm_q_dots_group = geometry_pd_q_dots_group.copy()
-
-        geometry_svm_p_hall = geometry_pd_p_hall.copy()
-        geometry_svm_q_hall = geometry_pd_q_hall.copy()
-
-        geometry_svm_p_tex = geometry_pd_p_tex.copy()
-        geometry_svm_q_tex = geometry_pd_q_tex.copy()
-
-        intro_svm_text = Text(r'Support Vector Machine (SVM)').set_font_size(32).set_color(RED).next_to(geometry_svm_q_tex, DOWN, buff=0.25)
-        intro_svm_text.shift([-intro_svm_text.get_center()[0], 0, 0])
-
-        geometry_svm_draw_subgroup = Group(
-            geometry_svm_p_dots_group,
-            geometry_svm_q_dots_group,
-            geometry_svm_p_hall,
-            geometry_svm_q_hall,
-            geometry_svm_p_tex,
-            geometry_svm_q_tex
-        )
-
-        geometry_svm_line = Line(*pd.optimal_svm_line, color=RED)
-        geometry_svm_dashedline = [
-            DashedLine(*pd.optimal_svm_line, color=RED).shift(LEFT * 0.75),
-            DashedLine(*pd.optimal_svm_line, color=RED).shift(-LEFT * 0.75),
-        ]
-
-        geometry_svm_draw_group = Group(geometry_svm_draw_subgroup, geometry_svm_line, *geometry_svm_dashedline, intro_svm_text)
-
-        ### animation
-
-        #### polytope distance
-
-        geometry_pd_draw_group.scale(0.8).next_to(intro_geometry_text, DOWN, buff=0.5)
-
-        self.play(Create(geometry_pd_p_hall), Create(geometry_pd_q_hall))
-        self.wait()
-        self.next_slide()
-
-        self.play(Create(geometry_pd_opt_line))
-        self.wait()
-        self.next_slide()
-
-        self.play(Create(intro_pd_text))
-        self.wait()
-        self.next_slide()
-
-        self.play(FadeIn(geometry_pd_p_dots_group, geometry_pd_q_dots_group, geometry_pd_p_tex, geometry_pd_q_tex))
-        self.wait()
-        self.next_slide()
-
-        self.play(geometry_pd_draw_group.animate.scale(0.65 / 0.8).to_edge(LEFT, buff=0.5))
-
-        #### svm
-
-        geometry_svm_draw_group.scale(0.65).to_edge(RIGHT, buff=0.5)
-
-        self.play(FadeIn(geometry_svm_draw_subgroup))
-        self.play(Create(geometry_svm_line))
-        self.play(
-            FadeOut(geometry_svm_p_hall, geometry_svm_q_hall),
-            FadeIn(*geometry_svm_dashedline, intro_svm_text)
-        )
-        self.wait()
-        self.next_slide()
-
-        self.play(
-            FadeOut(
-                geometry_svm_p_dots_group,
-                geometry_svm_q_dots_group,
-                geometry_svm_p_tex,
-                geometry_svm_q_tex,
-                geometry_svm_line, 
-                *geometry_svm_dashedline, 
-                intro_svm_text
-            ),
-            geometry_pd_draw_group.animate.scale(0.4).to_edge(UL, buff=0.4)
-        )
-        self.wait()
-        self.next_slide()
-
-
-        ## smallset enclosing ball
-        
-        geometry_draw_seb = Circle(radius=sebb.radius, color=RED, fill_opacity=0.3)
-        intro_seb_text = Text('Smallset Enclosing Ball (SEB)').set_font_size(32).set_color(RED).next_to(geometry_draw_seb, DOWN, buff=0.5)
-        
-        geometry_draw_seb_group = Group(geometry_draw_seb, *sebb.objects, intro_seb_text)
-
-        ### animation
-        geometry_draw_seb_group.scale(0.8).next_to(intro_geometry_text, DOWN, buff=0.5)
-
-        self.play(FadeIn(*sebb.objects))
-        self.wait()
-        self.next_slide()
-
-        self.play(Create(geometry_draw_seb))
-        self.play(Create(intro_seb_text))
-        self.wait()
-        self.next_slide()
-
-        ### sebb
-
-        self.play(FadeOut(geometry_draw_seb_group))
-
-        geometry_draw_sebb = Circle(radius=2.75, color=RED, fill_opacity=0.3).move_to([0.28, -0.07, 0])
-        intro_sebb_text = Text('SEB of Balls (SEBB)').set_font_size(32).set_color(RED).next_to(geometry_draw_sebb, DOWN, buff=0.5)
-        geometry_draw_sebb_objects = [x.copy() for x in sib.objects]
-        geometry_draw_sebb_group = Group(geometry_draw_sebb, *geometry_draw_sebb_objects, intro_sebb_text)
-
-        #### animation
-        geometry_draw_sebb_group.scale(0.8).next_to(intro_geometry_text, DOWN, buff=0.5)
-
-        self.play(FadeIn(*geometry_draw_sebb_objects))
-        self.wait()
-        self.next_slide()
-
-        self.play(Create(geometry_draw_sebb))
-        self.play(Create(intro_sebb_text))
-        self.wait()
-        self.next_slide()
-
-        self.play(
-            geometry_draw_sebb_group.animate.scale(0.4 * 0.65 / 0.8).to_edge(UR, buff=0.4)
-        )
-        self.wait()
-        self.next_slide()
-
-        
-        ## smallest intersecting ball
-
-        geometry_draw_sib = Circle(radius=2, color=RED, fill_opacity=0.3)
-        geometry_draw_sib_objects = [x.copy() for x in sib.objects]
-        geometry_draw_sib_subgroup = Group(geometry_draw_sib, *geometry_draw_sib_objects)
-        intro_sib_text = Text('Smallest Intersecting Ball (SIB)').set_font_size(32).set_color(RED).next_to(geometry_draw_sib_subgroup, DOWN, buff=0.5)
-        geometry_draw_sib_group = Group(geometry_draw_sib_subgroup, intro_sib_text)
-
-        #### animation
-        geometry_draw_sib_group.scale(0.8).next_to(intro_geometry_text, DOWN, buff=0.5)
-
-        self.play(FadeIn(*geometry_draw_sib_objects))
-        self.wait()
-        self.next_slide()
-
-        self.play(Create(geometry_draw_sib))
-        self.play(Create(intro_sib_text))
-        self.wait()
-        self.next_slide()
-
-        self.play(
-            geometry_draw_sib_group.animate.scale(0.4 * 0.65 / 0.8).next_to(geometry_pd_draw_group, DOWN, buff=0.25).to_edge(LEFT, buff=0.4)
-        )
-        self.wait()
-        self.next_slide()
-        
-        
-        ## Soft-SIB
-
-        geometry_draw_soft_sib = Circle(radius=sib.soft_radius, color=RED, fill_opacity=0.3).shift(sib.soft_center)
-        geometry_draw_soft_sib_margin = DashedVMobject(Circle(radius=sib.soft_margin_radius, color=RED, fill_opacity=0.3).shift(sib.soft_center))
-        geometry_draw_soft_sib_objects = [x.copy() for x in sib.objects]
-        geometry_draw_soft_sib_subgroup = Group(geometry_draw_soft_sib, *geometry_draw_soft_sib_objects, geometry_draw_soft_sib_margin)
-        intro_soft_sib_text = Text('Soft-SIB').set_font_size(32).set_color(RED).next_to(geometry_draw_soft_sib_subgroup, DOWN, buff=0.5)
-        geometry_draw_soft_sib_group = Group(geometry_draw_soft_sib_subgroup, intro_soft_sib_text)
-
-        #### animation
-        geometry_draw_soft_sib_group.scale(0.8).next_to(intro_geometry_text, DOWN, buff=0.5)
-
-        self.play(FadeIn(*geometry_draw_soft_sib_objects))
-        self.wait()
-        self.next_slide()
-
-        self.play(Create(geometry_draw_soft_sib))
-        self.play(FadeIn(geometry_draw_soft_sib_margin))
-        self.play(Create(intro_soft_sib_text))
-        self.wait()
-        self.next_slide()
-
-        geometry_intro_list = [
-            geometry_pd_draw_group.copy(),
-            geometry_draw_sebb_group.copy(),
-            geometry_draw_sib_group.copy(),
-            geometry_draw_soft_sib_group.copy().scale(0.4 * 0.65 / 0.8)
-        ]
-
-        geometry_intro_list[1].next_to(geometry_intro_list[0], RIGHT, buff=1)
-        geometry_intro_list[3].next_to(geometry_intro_list[1], DOWN, buff=0.25)
-        geometry_intro_list[2].move_to([geometry_intro_list[0].get_center()[0], geometry_intro_list[3].get_center()[1], 0])
-
-        geometry_intro_hidden_group = Group(*geometry_intro_list)
-
-        geometry_intro_hidden_group.scale(1.5).next_to(intro_geometry_text, DOWN, buff=0.25)
-
-        # self.add(geometry_intro_hidden_group)
-
-        self.play(
-            geometry_pd_draw_group.animate.scale(1.5).move_to(geometry_intro_list[0].get_center()),
-            geometry_draw_sebb_group.animate.scale(1.5).move_to(geometry_intro_list[1].get_center()),
-            geometry_draw_sib_group.animate.scale(1.5).move_to(geometry_intro_list[2].get_center()),
-            geometry_draw_soft_sib_group.animate.scale(0.4 * 0.65 * 1.5 / 0.8).move_to(geometry_intro_list[3].get_center())
-        )
-        self.wait()
-        self.next_slide()
-
-
-        # ## Intro - Symmetric Cone Programming
-        # self.play(
-        #     intro_circle_geometry.animate.scale(1 / 10).set_fill(BLUE, opacity=0.1),
-        #     subtitle_geometry.animate.set_font_size(25).move_to(intro_pos['subtitle_geometry']),
-        #     intro_circle_scp.animate.move_to(intro_pos['circle_scp']),
-        #     subtitle_scp.animate.move_to(intro_pos['subtitle_scp']),
-        #     intro_circle_parallel.animate.move_to(intro_pos['circle_parallel']),
-        #     subtitle_parallel.animate.move_to(intro_pos['subtitle_parallel'])
-        # )
-
-        # self.next_slide()
-
-        # self.play(Rotate(intro_group, PI* 2 / 3, about_point=(intro_circle_geometry.get_center() + intro_circle_scp.get_center() + intro_circle_parallel.get_center())/3))
-
-        # intro_pos['circle_geometry'] = intro_circle_geometry.get_center()
-        # intro_pos['circle_scp'] = intro_circle_scp.get_center()
-        # intro_pos['circle_parallel'] = intro_circle_parallel.get_center()
-        # intro_pos['subtitle_geometry'] = subtitle_geometry.get_center()
-        # intro_pos['subtitle_scp'] = subtitle_scp.get_center()
-        # intro_pos['subtitle_parallel'] = subtitle_parallel.get_center()
-
-        # self.play(
-        #     intro_circle_geometry.animate.shift(DR * 10),
-        #     subtitle_geometry.animate.shift(DR * 10),
-        #     intro_circle_scp.animate.scale(10).set_fill(None, opacity=0),
-        #     subtitle_scp.animate.set_font_size(30).to_edge(UP, buff=0.5),
-        #     intro_circle_parallel.animate.shift(DL * 10),
-        #     subtitle_parallel.animate.shift(DL * 10)
-        # )
-
-        # self.next_slide()
-
-        # ## Intro - Parallel Computing
-        # self.play(
-        #     intro_circle_geometry.animate.move_to(intro_pos['circle_geometry']),
-        #     subtitle_geometry.animate.move_to(intro_pos['subtitle_geometry']),
-        #     intro_circle_scp.animate.scale(1 / 10).set_fill(YELLOW, opacity=0.1),
-        #     subtitle_scp.animate.set_font_size(22).move_to(intro_pos['subtitle_scp']),
-        #     intro_circle_parallel.animate.move_to(intro_pos['circle_parallel']),
-        #     subtitle_parallel.animate.move_to(intro_pos['subtitle_parallel'])
-        # )
-
-        # self.next_slide()
-
-        # self.play(Rotate(intro_group, - PI / 3, about_point=(intro_circle_geometry.get_center() + intro_circle_scp.get_center() + intro_circle_parallel.get_center())/3))
-
-        # intro_pos['circle_geometry'] = intro_circle_geometry.get_center()
-        # intro_pos['circle_scp'] = intro_circle_scp.get_center()
-        # intro_pos['circle_parallel'] = intro_circle_parallel.get_center()
-        # intro_pos['subtitle_geometry'] = subtitle_geometry.get_center()
-        # intro_pos['subtitle_scp'] = subtitle_scp.get_center()
-        # intro_pos['subtitle_parallel'] = subtitle_parallel.get_center()
-
-        # self.play(
-        #     intro_circle_geometry.animate.shift(UL * 10),
-        #     subtitle_geometry.animate.shift(UL * 10),
-        #     intro_circle_scp.animate.shift(UR * 10),
-        #     subtitle_scp.animate.shift(UR * 10),
-        #     intro_circle_parallel.animate.scale(10).set_fill(None, opacity=0),
-        #     subtitle_parallel.animate.set_font_size(30).to_edge(UP, buff=0.5)
-        # )
-
-        # self.next_slide()
-
 
         # ## Intro - Ending
         # self.play(
