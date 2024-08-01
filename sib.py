@@ -18,3 +18,12 @@ while counter < 5:
     if x ** 2 + y ** 2 <= 4:
         counter += 1
         objects.append(Circle(radius=np.random.uniform(0.3, 0.7), color=YELLOW, fill_opacity=0.3).shift([x, y, 0]))
+
+soft_direction = objects[1].get_center() - objects[2].get_center()
+soft_distance = np.sqrt(sum(soft_direction ** 2))
+soft_radius = (soft_distance - 0.65) / 2
+soft_center = (objects[2].get_center() + soft_direction * (0.4 / soft_distance) + objects[2].get_center() + soft_direction * (soft_distance - 0.25) / soft_distance) / 2
+soft_margin_radius = np.sqrt(sum((soft_center - np.array([2.5, 0, 0])) ** 2)) - 0.5
+
+# print(direction, soft_distance, radius, center)
+
