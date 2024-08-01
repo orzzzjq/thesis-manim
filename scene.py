@@ -813,7 +813,7 @@ class Presentation(Slide):
         self.next_slide()
 
         oracle_width_intro = MyTex(r'''
-        Width $\rho$ of {\sc Oracle}: an upperbound on $\|\brmf(\mmx)\|_\infty$, namely $\|\brmf(\mmx)\|_\infty \le \rho$
+        Width $\rho$ of {\sc Oracle}: an upper bound on $\|\brmf(\mmx)\|_\infty$, namely $\|\brmf(\mmx)\|_\infty \le \rho$
         ''', up=oracle_intro)
         oracle_width_intro[0][:15].set_color(YELLOW)
 
@@ -1021,17 +1021,17 @@ class Presentation(Slide):
         )
         game_eigenval_proof.append(
             MyTex(r'''\scalebox{0.8}{
-            Upperbound: $\displaystyle \Tr(\xt{\mmw}{T+1}) \le \Tr(\xt{\mmw}{T})\cdot\exp\Big(- {\eta\over \rho}\brmf(\xt{\mmx}{T})\bullet\xt{\mmy}{T} + {\eta^2\over \rho^2}\big(\brmf(\xt{\mmx}{T})\big)^2\bullet\xt{\mmy}{T}\Big)$
+            Upper bound: $\displaystyle \Tr(\xt{\mmw}{T+1}) \le \Tr(\xt{\mmw}{T})\cdot\exp\Big(- {\eta\over \rho}\brmf(\xt{\mmx}{T})\bullet\xt{\mmy}{T} + {\eta^2\over \rho^2}\big(\brmf(\xt{\mmx}{T})\big)^2\bullet\xt{\mmy}{T}\Big)$
             } ''', up=game_eigenval_proof[-1], buff=0.25)
         )
         game_eigenval_proof.append(
             MyTex(r'''\scalebox{0.8}{
-            Upperbound: $\displaystyle \Tr(\xt{\mmw}{T+1}) \le r\cdot\exp\Big(-\sum_{t=1}^T {\eta\over \rho} \brmf(\xt{\mmx}{t})\bullet \xt{\mmy}{t} + \sum_{t=1}^T {\eta^2\over \rho^2}\big(\brmf(\xt{\mmx}{t})\big)^2\bullet\xt{\mmy}{t}\Big)$
+            Upper bound: $\displaystyle \Tr(\xt{\mmw}{T+1}) \le r\cdot\exp\Big(-\sum_{t=1}^T {\eta\over \rho} \brmf(\xt{\mmx}{t})\bullet \xt{\mmy}{t} + \sum_{t=1}^T {\eta^2\over \rho^2}\big(\brmf(\xt{\mmx}{t})\big)^2\bullet\xt{\mmy}{t}\Big)$
             } ''', up=game_eigenval_proof[-2], buff=0.24)
         )
         game_eigenval_proof.append(
             MyTex(r'''\scalebox{0.8}{
-            Lowerbound: $\displaystyle \Tr(\xt{\mmw}{T+1}) \ge \displaystyle\exp\Big(-{\eta\over \rho}\lambda_{\min}\big(\sum_{t=1}^{T}\brmf(\xt{\mmx}{t})\big)\Big)$
+            Lower bound: $\displaystyle \Tr(\xt{\mmw}{T+1}) \ge \displaystyle\exp\Big(-{\eta\over \rho}\lambda_{\min}\big(\sum_{t=1}^{T}\brmf(\xt{\mmx}{t})\big)\Big)$
             } ''', up=game_eigenval_proof[-1], buff=0.25)
         )
 
@@ -1126,7 +1126,7 @@ class Presentation(Slide):
 
         self.play(FadeOut(geometry_summary_table, geometry_summary_notes))
 
-        geoemtry_subtitle_sib = Text(": SIB").set_font_size(25).next_to(subtitle_geometry, RIGHT, buff=0.2).shift(UP * 0.02)
+        geoemtry_subtitle_sib = Text(": SIB").set_font_size(25).next_to(subtitle_geometry, RIGHT, buff=0.1).shift(UP * 0.02)
 
         self.play(Create(geoemtry_subtitle_sib))
         self.wait()
@@ -1789,7 +1789,7 @@ class Presentation(Slide):
 
         geometry_sib_opt_proof.append( # 4
             MyTex(r'''\scalebox{0.8}{\parbox{15cm}{
-            An upperbound on $r^*$:
+            An upper bound on $r^*$:
             \begin{myitemize}
             \item Pick $\mmv_i \in \Omega_i$, compute $\displaystyle E = \max_{i\in [n]} \|\mmv_1 - \mmv_i\|$, then $r^* \le E \le D$
             \end{myitemize}
@@ -1802,7 +1802,7 @@ class Presentation(Slide):
 
         geometry_sib_opt_proof.append( # 5
             MyTex(r'''\scalebox{0.8}{\parbox{15cm}{
-            An upperbound on $\|\brmf(\xt{\mmx}{t})\|_\infty$:
+            An upper bound on $\|\brmf(\xt{\mmx}{t})\|_\infty$:
             \begin{myitemize}
             \item Use the doubling trick
             \item $\rho_1 = \sqrt{2}E$, $\rho_\tau = 2 \rho_{\tau - 1}$
@@ -1916,7 +1916,7 @@ class Presentation(Slide):
         self.wait()
         self.next_slide()
 
-        self.play(FadeOut(geometry_sib_extension, geometry_sib_takeaway, geometry_sib_opt_thm))
+        self.play(FadeOut(geometry_sib_extension, geometry_sib_takeaway, geometry_sib_opt_thm, geoemtry_subtitle_sib))
 
 
 
