@@ -992,13 +992,13 @@ class Presentation(Slide):
         self.next_slide()
         self.play(FadeOut(intro_circle_group))
 
-        # # Outline #####################################################################################################
-        ## Euclidean Jordan Algebra & Symmetric Cones
-        ## Zero-Sum Game in EJA
-        ## Geometric Optimization
-        ## Symmetric Cone Programming
-        ## Parallel Computing
-        ## Conclusion and Future Directions
+        # Outline #####################################################################################################
+        # Euclidean Jordan Algebra & Symmetric Cones
+        # Zero-Sum Game in EJA
+        # Geometric Optimization
+        # Symmetric Cone Programming
+        # Parallel Computing
+        # Conclusion and Future Directions
 
         self.play(
             subtitle_geometry.animate.rotate(-PI/3).set_font_size(25).move_to([0., 0.41891479, 0.]),
@@ -2518,7 +2518,84 @@ class Presentation(Slide):
 
         self.play(FadeOut(geometry_sib_extension, geometry_sib_takeaway, geometry_sib_opt_thm, geoemtry_subtitle_sib))
 
+        geometry_others = [
+            MyTex(r'''\scalebox{0.9}{\parbox{15cm}{
+                Polytope distance (Hard-SVM)
+                \begin{myitemize}
+                \item[] $
+                \displaystyle
+                \begin{aligned}[t]
+                \minimize_{\mmgamma,\ \mmmu}\quad & \|\mmP\mmgamma - \mmQ\mmmu\|\\
+                \subto\quad & \mmone^T \mmgamma = 1, \ \mmgamma \ge 0, \\
+                & \mmone^T \mmmu = 1, \ \mmmu \ge 0
+                \end{aligned}
+                \hspace{3em}
+                \begin{aligned}[t]
+                \maximize_{\mmw, s_1, s_2}\quad & s_1 + s_2 \\
+                \subto\quad & \mmP^T \mmw - s_1 \mmone \ge 0,  \\
+                & -\mmQ^T \mmw - s_2 \mmone \ge 0, \\
+                & \|\mmw\| \le 1
+                \end{aligned}
+                $
+                \end{myitemize}
+            }}''', up=subtitle_geometry)
+        ]
 
+        geometry_others[-1][0][:26].set_color(BLUE)
+        
+        geometry_others.append(
+            MyTex(r'''\scalebox{0.9}{\parbox{15cm}{
+                SEB of balls (SEBB)
+                \begin{myitemize}
+                \item[] $
+                \displaystyle
+                \begin{aligned}[t]
+                \minimize_{\mmz,\ r} \quad & r\\
+                \subto\quad & \|\mmz - \mmp_i\| \le r - r_i,\ \forall i \in [n]
+                \end{aligned}
+                $
+                \end{myitemize}
+            }}''', up=geometry_others[-1])
+        )
+
+        geometry_others[-1][0][:16].set_color(BLUE)
+        
+        geometry_others.append(
+            MyTex(r'''\scalebox{0.9}{\parbox{15cm}{
+                Soft-margin SIB
+                \begin{myitemize}
+                \item[] $
+                \displaystyle
+                \begin{aligned}[t]
+                \underset{\mmz, \mmv_1, \dots, \mmv_n, \mmxi, r}{\rm minimize} \quad
+                & r + C \sum_{i=1}^n \xi_i\\
+                {\rm subject\ to} \quad
+                & \|\mmz - \mmv_i\| \le r + \xi_i,\ \forall i \in [n],\\
+                & \mmv_i \in \Omega_i,\ \forall i \in [n],\\
+                & \mmxi\ge 0,\ r \ge 0
+                \end{aligned}
+                $
+                \end{myitemize}
+            }}''')
+        )
+
+        geometry_others[-1][0][:14].set_color(BLUE)
+        geometry_others[-1].next_to(geometry_others[-2], RIGHT, buff=1)
+        geometry_others[-1].shift([0, geometry_others[-2].get_top()[1] - geometry_others[-1].get_top()[1], 0])
+
+        self.play(FadeIn(geometry_others[0]))
+        self.wait()
+        self.next_slide()
+
+        self.play(FadeIn(geometry_others[1]))
+        self.wait()
+        self.next_slide()
+
+        self.play(FadeIn(geometry_others[2]))
+        self.wait()
+        self.next_slide()
+        
+        self.play(FadeOut(*geometry_others))
 
 
 #xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
