@@ -1670,7 +1670,7 @@
         // number for the current slide. The function should take in a slide
         // object and return an array with one string [slideNumber] or
         // three strings [n1,delimiter,n2]. See #formatSlideNumber().
-        slideNumber: false,
+        slideNumber: "c",
 
         // Can be used to limit the contexts in which the slide number appears
         // - "all":      Always show the slide number
@@ -1880,6 +1880,80 @@
       
     </script>
 
+    <!-- Add a clock to each section dynamically using JavaScript -->
+    <script>
+      document.addEventListener('DOMContentLoaded', function () {
+        var revealContainer = document.querySelector('.reveal');
+        var clockContainer = document.createElement('div');
+        clockContainer.className = 'clock';
+        revealContainer.appendChild(clockContainer);
+
+        // Append dynamic content to each section
+        // var sections = revealContainer.querySelectorAll('.slides > section');
+        // revealContainer.forEach(function (section) {
+        //   // Create a new clock container
+
+        //   // Append the new clock container to the section
+        //   section.appendChild(clockContainer);
+        // });
+
+        // Function to update the clock content
+        function updateClock() {
+          var now = new Date();
+          var hours = now.getHours();
+          var minutes = now.getMinutes();
+          // var seconds = now.getSeconds();
+
+          // Format the time as HH:MM:SS
+          var timeString = pad(hours) + ":" + pad(minutes);
+
+          // Update the content of all clock containers
+          var clockContainers = document.querySelectorAll('.clock');
+          clockContainers.forEach(function (container) {
+            container.innerText = timeString;
+          });
+        }
+
+        // Function to pad zero for single-digit numbers
+        function pad(number) {
+          return String(number).padStart(2, "0");
+        }
+
+        // Update the clock every second
+        setInterval(updateClock, 1000);
+
+        // Register a reveal.js event to update the clock on each slide change
+        Reveal.addEventListener('slidechanged', function (event) {
+          updateClock();
+        });
+
+        // Initial update
+        updateClock();
+      });
+    </script>
+
+    <!-- define the style of the clock -->
+    <style>
+      .clock {
+        font-size: 24pt;
+        font-family: "Arial", sans-serif;
+        color: #969696;
+        position: absolute;
+        z-index: 9999!important;
+        padding: 5px;
+        bottom: 0px;
+        left: 0px;
+      }
+
+      .reveal .slide-number {
+        font-size: 24pt;
+        font-family: "Arial", sans-serif;
+        color: #969696;
+        position: absolute;
+        bottom: 0px;
+        right: 0px;
+      }
+    </style>
     
   </body>
 </html>
