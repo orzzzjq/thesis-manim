@@ -857,6 +857,7 @@ class Presentation(Slide):
 
         # LP
         self.play(FadeOut(intro_parallel_arrows[0]))
+        intro_parallel_arrows[1] = Arrow(intro_parallel_gpu[1].get_right(), intro_parallel_titles[2].get_center(), buff=0.5, stroke_width=8)
         self.play(
             Create(intro_parallel_arrows[1]), Create(intro_parallel_arrows[3]),
             FadeIn(intro_parallel_opt[1])
@@ -884,6 +885,7 @@ class Presentation(Slide):
         self.wait()
         self.next_slide()
 
+        intro_parallel_arrows[4] = Arrow(intro_parallel_titles[2].get_center(), intro_parallel_gpu[2].get_right(), buff=0.5, stroke_width=8)
         self.play(
             Create(intro_parallel_arrows[4]),
             FadeIn(intro_parallel_gpu[2])
@@ -894,6 +896,8 @@ class Presentation(Slide):
         self.play(
             FadeOut(intro_parallel_arrows[4])
         )
+
+        intro_parallel_arrows[1] = Arrow(intro_parallel_gpu[2].get_right(), intro_parallel_titles[2].get_center(), buff=0.5, stroke_width=8)
         self.play(
             Create(intro_parallel_arrows[1])
         )
@@ -936,6 +940,9 @@ class Presentation(Slide):
         self.play(
             FadeOut(intro_parallel_arrows[5])
         )
+        
+        intro_parallel_arrows[2] = Arrow(intro_parallel_titles[1].get_center(), intro_parallel_gpu[-2].get_left(), buff=0.5, stroke_width=8)
+        intro_parallel_arrows[4] = Arrow(intro_parallel_titles[2].get_center(), intro_parallel_gpu[-2].get_right(), buff=0.5, stroke_width=8)
         self.play(
             Create(intro_parallel_arrows[2]),
             Create(intro_parallel_arrows[4])
