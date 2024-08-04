@@ -3134,7 +3134,7 @@ class Presentation(Slide):
 
         scp_primal_proof.append( # 3
             MyTex(r'''\scalebox{0.9}{\parbox{15cm}{
-                Let $\displaystyle \cc{A} = \Big\{\mmx \in \bR^m : \mmx \in \cc{C}, \ \mmc^T \mmx \ge \hat{\alpha} \Big\}$
+                Let $\displaystyle \cc{A} = \Big\{\mmx \in \bR^m : \mmx \in \cc{C}, \ \mmc^T \mmx \le \hat{\alpha} \Big\}$
             }}''', up=scp_primal_proof[-1], buff=0.25)
         )
 
@@ -3838,9 +3838,9 @@ class Presentation(Slide):
             MyTex(r'''\scalebox{0.85}{\parbox{15cm}{
             Our implementation for PD/SVM and SEB:
             \begin{myitemize}
-            \item PDSCP: sequential (CPU) version, implemented in C++
+            \item PDSCP: parallel (GPU) version, implemented in CUDA
             \vspace{-0.4em}
-            \item PDSCP-ST: parallel (GPU) version, implemented in CUDA
+            \item PDSCP-ST: sequential (CPU) version, implemented in C++
             \vspace{-0.4em}
             \item Some ``standard'' strategies: line search, early stopping, etc.
             \end{myitemize}
@@ -3850,7 +3850,7 @@ class Presentation(Slide):
         parallel_experiment[-1][0][:33].set_color(YELLOW)
 
         parallel_experiment[-1][0][34:40].set_color(RED)
-        parallel_experiment[-1][0][80:89].set_color(RED)
+        parallel_experiment[-1][0][79:88].set_color(RED)
 
         self.play(Create(parallel_experiment[-1]))
         self.wait()
